@@ -88,19 +88,22 @@ module.exports = {
 
 	// Development Environment
 	development: {
+		port: '3000',
 		database: {
-			host: '127.0.0.1',
-			login: 'dev',
-			password: 'dev'
+			host: 'localhost',
+			name: 'despachalo-dev'
 		}
 	},
 
 	// Production Environment
 	production: {
+		port: '8084',
 		database: {
-			host: '127.0.0.1',
-			login: 'prod',
-			password: 'prod'
+			user: 'admin',
+			pass: 'qpalwosk10',
+			host: 'ds151068.mlab.com',
+			port: '51068',
+			name: 'despachalo-prod'
 		}
 	}
 };

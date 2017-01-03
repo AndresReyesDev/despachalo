@@ -37,7 +37,7 @@ consumes:
 produces:
   - application/json
 paths:
-  /userLogin:
+  /users/login:
     post:
       tags:
         - Usuario
@@ -250,7 +250,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /users/resetPassword:
+  /users/reset/password:
     get:
       tags:
         - Usuario
@@ -313,7 +313,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /users/validateEmail:
+  /users/validate/email:
     get:
       tags:
         - Usuario
@@ -801,16 +801,13 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /tarificar:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: tarificar
-    x-a127-apply: {}
+  /rates:
     post:
       tags:
         - Tarificar
       description: Recibe los datos de origen, destino y volumetria del paquete a tarififcar con los servicios de CXP  - CDCH
       # used as the method name of the controller
-      operationId: tarificar
+      operationId: rates
       parameters:
         - name: authorization
           in: header
@@ -826,7 +823,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: "#/definitions/Tarificar"
+            $ref: "#/definitions/Rate"
       responses:
         "200":
           description: Success
@@ -866,10 +863,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /tarificar/internacional:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: tarificarInt
-    x-a127-apply: {}
+  /ratesInt:
     post:
       tags:
         - Tarificar
@@ -891,7 +885,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: "#/definitions/TarificarInt"
+            $ref: "#/definitions/RatesInt"
       responses:
         "200":
           description: Success
@@ -932,9 +926,6 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   /puntopagos/pagar/:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: botonPuntoPagos
-    x-a127-apply: {}
     get:
       tags:
         - PuntoPago
@@ -959,9 +950,6 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   /puntopagos/notificacion/:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: botonPuntoPagos
-    x-a127-apply: {}
     post:
       tags:
         - PuntoPago
@@ -996,9 +984,6 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   /puntopagos/validar/:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: botonPuntoPagos
-    x-a127-apply: {}
     get:
       tags:
         - PuntoPago
@@ -1022,7 +1007,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /geo/regiones:
+  /geo/regions:
     get:
       tags:
         - Georeferencia
@@ -1056,7 +1041,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /geo/provincias:
+  /geo/provinces:
     get:
       tags:
         - Georeferencia
@@ -1085,7 +1070,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /geo/comunas:
+  /geo/communes:
     get:
       tags:
         - Georeferencia
@@ -1119,7 +1104,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /geo/paises:
+  /geo/countries:
     get:
       tags:
         - Georeferencia
@@ -1369,88 +1354,88 @@ definitions:
       type:
         description: Tipo de bolsa prepago
         type: string
-  Tarificar:
+  Rate:
     type: object
     required:
-      - comunaOrigen
-      - comunaDestino
-      - peso
-      - ancho
-      - alto
-      - largo
+      - communeOrigin
+      - communeDestination
+      - weight
+      - width
+      - height
+      - long
     properties:
-      comunaOrigen:
+      communeOrigin:
         description: Comuna origen
         type: string
-      comunaDestino:
+      communeDestination:
         description: Comuna destino
         type: string
-      peso:
+      weight:
         description: Peso (kg)
         type: number
         minimum: 1
-      ancho:
+      width:
         description: Ancho (m)
         type: number
         minimum: 1
-      alto:
+      height:
         description: Alto (m)
         type: number
         minimum: 1
-      largo:
+      long:
         description: Largo (m)
         type: number
         minimum: 1
-  TarificarInt:
+  RatesInt:
     type: object
     required:
-      - paisOrigen
-      - estadoOrigen
-      - ciudadOrigen
-      - codigoPostalOrigen
-      - paisDestino
-      - estadoDestino
-      - ciudadDestino
-      - codigoPostalDestino
-      - peso
-      - ancho
-      - alto
-      - largo
+      - countryOrigin
+      - stateOrigin
+      - cityOrigin
+      - postalCodeOrigin
+      - countryDestination
+      - stateDestination
+      - cityDestination
+      - postalCodeDestination
+      - weight
+      - width
+      - height
+      - long
     properties:
-      paisOrigen:
+      countryOrigin:
         description: Pais origen
         type: string
-      estadoOrigen:
+      stateOrigin:
         description: Estado origen
         type: string
-      ciudadOrigen:
+      cityOrigin:
         description: Ciudad origen
         type: string
-      codigoPostalOrigen:
+      postalCodeOrigin:
         description: Codigo Postal origen
         type: string
-      paisDestino:
+      countryDestination:
         description: Pais destino
         type: string
-      estadoDestino:
+      stateDestination:
         description: Estado destino
         type: string
-      ciudadDestino:
+      cityDestination:
         description: Ciudad destino
         type: string
-      codigoPostalDestino:
+      postalCodeDestination:
         description: Codigo Postal destino
         type: string
-      peso:
+      weight:
         description: Peso (kg)
         type: number
-      ancho:
+      width:
         description: Ancho (cm)
         type: number
-      alto:
+      height:
         description: Alto (cm)
         type: number
-      largo:
+      long:
         description: Largo (cm)
         type: number
   Notificacion:

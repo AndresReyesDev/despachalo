@@ -10,7 +10,22 @@ var user = new Schema({
 	rut: String,
 	quotes: { type: String, default: 0 },
 	status: { type: Boolean, default: false },
-	token: String
+	token: String,
+	provider: String,
+	google: {
+		id: String,
+		token: String,
+		email: String,
+		name: String,
+		lastname: String
+	}
+	facebook: {
+		id: String,
+		token: String,
+		email: String,
+		name: String,
+		lastname: String
+	}
 });
 
 module.exports = mongoose.model('User', user);

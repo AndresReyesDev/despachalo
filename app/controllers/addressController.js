@@ -8,7 +8,7 @@ module.exports = {
   findAllAddresses: findAllAddresses,
   findAddress: findAddress,
   addAddress: addAddress,
-  editAddress: editAddress,
+  updateAddress: updateAddress,
   deleteAddress: deleteAddress
 };
 
@@ -162,7 +162,7 @@ function addAddress (req, res) {
 	  });
 }
 
-function editAddress (req, res) {
+function updateAddress (req, res) {
   	var body = req.body;
   	var email = body.email;
   	var alias = body.alias;

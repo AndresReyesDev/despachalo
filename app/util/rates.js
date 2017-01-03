@@ -1,26 +1,26 @@
 'use strict';
 var soap = require('soap');
-var Comuna = require('../model/comunas');
-var ClienteREST = require('../helpers/wsClient/clienteREST');
-var config = require('./config/config');
+var Commune = require('../models/commune');
+var RestClient = require('../util/wsClient/restClient');
+var config = require('./config');
 var fedexAPI = require('../../node_modules/shipping-fedex/lib/index');
 
 module.exports = {
-  tarificarCXP: tarificarCXP,
-  tarificarCDCH: tarificarCDCH,
-  tarificarFDX: tarificarFDX,
+  rateCXP: rateCXP,
+  rateCDCH: rateCDCH,
+  rateFDX: rateFDX,
   shippo: shippo
 };
 
-function tarificarCXP (comunaOrigen, comunaDestino, pesoPieza, anchoPieza, altoPieza, largoPieza, callback) {
+function rateCXP (communeOrigin, communeDestination, weight, width, height, long, callback) {
 
-  Comuna.findOne({identificadorDSPL:comunaOrigen}, function (err, comOrigen) {
-    if (!err && comOrigen.identificadorCXP) {
-      Comuna.findOne({identificadorDSPL:comunaDestino}, function (err, comDestino){
-        if (!err && comDestino.identificadorCXP) {
-            var url_cxp = config.services.chilexpress.tarificar + 'codOrigen='+comOrigen.identificadorCXP+'&codDestino='+comDestino.identificadorCXP+'&pesoPieza='+pesoPieza+'&anchoPieza='+anchoPieza+'&altoPieza='+altoPieza+'&largoPieza='+largoPieza;
+  Commune.findOne({idDSPL:communeOrigin}, function (err, comOrigen) {
+    if (!err && comOrigen.idCXP) {
+      Commune.findOne({idDSPL:communeDestination}, function (err, comDestino){
+        if (!err && comDestino.idCXP) {
+            var url_cxp = config.services.chilexpress.tarificar + 'codOrigen='+comOrigen.idCXP+'&codDestino='+comDestino.idCXP+'&pesoPieza='+weight+'&anchoPieza='+width+'&altoPieza='+height+'&largoPieza='+long;
 
-            ClienteREST.req(url_cxp, function(chunk, statusCode){
+            RestClient.req(url_cxp, function(chunk, statusCode){
               console.log('StatusCode Tarificacion CXP (' + statusCode + ')');
               callback(chunk, 'cxp');
             });
@@ -36,25 +36,25 @@ function tarificarCXP (comunaOrigen, comunaDestino, pesoPieza, anchoPieza, altoP
   });
 }
 
-function tarificarCDCH (comunaOrigen, comunaDestino, pesoPieza, anchoPieza, altoPieza, largoPieza, callback) {
+function rateCDCH (communeOrigin, communeDestination, weight, width, height, long, callback) {
 
-  Comuna.findOne({identificadorDSPL:comunaOrigen}, function (err, comOrigen) {
-    if (!err && comOrigen.nombreCDCH) {
-      Comuna.findOne({identificadorDSPL:comunaDestino}, function (err, comDestino){
-        if (!err && comDestino.nombreCDCH) {
+  Commune.findOne({idDSPL:communeOrigin}, function (err, comOrigen) {
+    if (!err && comOrigen.nameCDCH) {
+      Commune.findOne({idDSPL:communeDestination}, function (err, comDestino){
+        if (!err && comDestino.nameCDCH) {
             var url_cdc = config.services.correoschile.tarificar;
-            var volumen = anchoPieza * altoPieza * largoPieza;
+            var volumen = width * height * long;
             var volumenBase = '5000';
 
             var args = { 
               usuario: config.services.correoschile.autenticacion.usuario,
               contrasena: config.services.correoschile.autenticacion.contrasena,
               consultaCobertura: {
-                ComunaDestino: comDestino.nombreCDCH,
-                ComunaRemitente: comOrigen.nombreCDCH,
+                ComunaDestino: comDestino.nameCDCH,
+                ComunaRemitente: comOrigen.nameCDCH,
                 ImporteReembolso: '0',
                 ImporteValorAsegurado: '0',
-                Kilos: pesoPieza,
+                Kilos: weight,
                 NumeroTotalPieza: '1',
                 PaisDestinatario: '056',
                 PaisRemitente: '056',
@@ -89,7 +89,7 @@ function tarificarCDCH (comunaOrigen, comunaDestino, pesoPieza, anchoPieza, alto
   });
 }
 
-function tarificarFDX (addressFrom, addressTo, parcel, callback) {
+function rateFDX (addressFrom, addressTo, parcel, callback) {
 
   var fedex = new fedexAPI({
     environment: 'sandbox', // or live

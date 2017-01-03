@@ -64,7 +64,7 @@ function findBags (req, res) {
             res.status(404).send({ code: 404, desc: 'No bags bought'});
             console.log('LOG: No bags bought');
           }
-        }).sort('-comprada');
+        }).sort('-purchased');
       }
   });
 }

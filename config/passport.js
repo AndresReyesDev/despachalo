@@ -72,55 +72,6 @@ module.exports = function(passport) {
 
     }));
 
-    // LINKEDIN Strategy
-    passport.use(new LinkedInStrategy({
-
-        clientID        : configAuth.linkedinAuth.clientID,
-        clientSecret    : configAuth.linkedinAuth.clientSecret,
-        callbackURL     : configAuth.linkedinAuth.callbackURL,
-        state           : true
-    },
-    function(token, refreshToken, profile, done) {
-
-        // make the code asynchronous
-        // User.findOne won't fire until we have all our data back from Google
-        process.nextTick(function() {
-
-            // try to find the user based on their facebook id
-            User.findOne({ 'linkedin.id' : profile.id }, function(err, user) {
-                if (err)
-                    return done(err);
-                if (user) {
-                    // if a user is found, log them in
-                    return done(null, user);
-                } else {
-                    // if the user isnt in our database, create a new user
-                    var newUser = new User();
-
-                    // set all of the relevant information
-                    newUser.linkedin.id = profile.id;
-                    newUser.linkedin.token = token;
-                    newUser.linkedin.name = profile.name.givenName;
-                    newUser.linkedin.lastname = profile.name.familyName;
-                    newUser.linkedin.email = profile.emails[0].value;
-
-                    newUser.email = profile.emails[0].value; // for local user
-                    newUser.name = profile.name.givenName; // for local user
-                    newUser.lastname = profile.name.familyName; // for local user
-                    newUser.provider = profile.provider; // for local user
-
-                    // save the user
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-                        return done(null, newUser);
-                    });
-                }
-            });
-        });
-
-    }));
-
     // FACEBOOK Strategy
     passport.use(new FacebookStrategy({
 

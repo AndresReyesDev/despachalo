@@ -1,28 +1,87 @@
 module.exports = function (app, passport) {
 
 	var UserController = require('../controllers/userController');
+	var BagController = require('../controllers/bagController');
+	var AddressController = require('../controllers/addressController');
+	var TokenController = require('../controllers/tokenController');
+	var PermissionController = require('../controllers/permissionController');
+	var RatesController = require('../controllers/ratesController');
+	var RatesIntController = require('../controllers/ratesIntController');
+
+	var GeoCommuneController = require('../controllers/geoCommuneController');
+	var GeoCountryController = require('../controllers/geoCountryController');
+	var GeoProvinceController = require('../controllers/geoProvinceController');
+	var GeoRegionController = require('../controllers/geoRegionController');
+
 	var jwtController = require('../controllers/jwtController');
 
 	// Usuarios
-	app.get('/onjobs/v1/users', UserController.findAllUsers);
-	app.post('/onjobs/v1/users', UserController.addUser);
-	app.get('/onjobs/v1/users/:id', UserController.findById);
-	app.put('/onjobs/v1/users/:id', UserController.updateUser);
-	app.delete('/onjobs/v1/users/:id', UserController.deleteUser);
+	app.post('/desp/v1/users/login', UserController.userLogin);
+
+	app.get('/desp/v1/users', UserController.findUsers);
+	app.post('/desp/v1/users', UserController.findUserByEmail);
+	app.put('/desp/v1/users', UserController.updateUser);
+	app.delete('/desp/v1/users', UserController.deleteUser);
+
+	// User types
+	app.get('/desp/v1/users/types', UserController.findTypesUser);
+	app.post('/desp/v1/users/types', UserController.findTypeUser);
+
+	// User Adminitrador
+	app.post('/desp/v1/users/add', UserController.addUser);
+	app.get('/desp/v1/users/reset/password', UserController.userResetPassword);
+
+	// User Client
+	app.post('/desp/v1/users/register', UserController.userRegister);
+	app.get('/desp/v1/users/validate/email', UserController.userValidateEmail);
+
+	// Bags
+	app.get('/desp/v1/bags', BagController.findBags);
+	app.get('/desp/v1/bag', BagController.findBag);
+	app.post('/desp/v1/bag', UserController.addBag);
+
+	// Address
+	app.get('/desp/v1/addresses', AddressController.findAllAddresses);
+	app.get('/desp/v1/address', AddressController.findAddress);
+	app.post('/desp/v1/address', AddressController.addAddress);
+	app.put('/desp/v1/address', AddressController.updateAddress);
+	app.delete('/desp/v1/address', AddressController.deleteAddress);
+
+	// Token
+	app.get('/desp/v1/token', TokenController.findToken);
+	app.post('/desp/v1/token', TokenController.addToken);
+	app.put('/desp/v1/token', TokenController.updateToken);
+	app.delete('/desp/v1/token', TokenController.deleteToken);
+
+	// Permission
+	app.get('/desp/v1/permission', PermissionController.findPermission);
+	app.post('/desp/v1/permission', PermissionController.addPermission);
+	app.put('/desp/v1/permission', PermissionController.updatePermission);
+	app.delete('/desp/v1/permission', PermissionController.deletePermission);
+
+	// Rates
+	app.get('/desp/v1/rates', RatesController.rates);
+	app.post('/desp/v1/rates', RatesController.getRates);
+
+	// Rates Int
+	app.get('/desp/v1/ratesInt', RatesIntController.ratesInt);
+	app.post('/desp/v1/ratesInt', RatesIntController.getRatesInt);
+
+	// Georeference
+	app.get('/desp/v1/geo/communes', GeoCommuneController.geoCommunes);
+	app.get('/desp/v1/geo/countries', GeoCountryController.geoCountries);
+	app.get('/desp/v1/geo/provinces', GeoProvinceController.geoProvinces);
+	app.get('/desp/v1/geo/regions', GeoRegionController.geoRegions);
 
 	// Json Web Token
-	app.post('/onjobs/v1/token/:id', jwtController.resetToken);
-	app.get('/onjobs/v1/token', jwtController.generateToken);
+	app.post('/desp/v1/token/:id', jwtController.resetToken);
+	app.get('/desp/v1/token', jwtController.generateToken);
 
 	// Google Authentication
-    app.get('/onjobs/v1/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
-    app.get('/onjobs/v1/auth/google/callback', passport.authenticate('google'), jwtController.generateSocialTokenUser);
-
-    // Linkedin Authentication
-    app.get('/onjobs/v1/auth/linkedin',passport.authenticate('linkedin'));
-	app.get('/onjobs/v1/auth/linkedin/callback', passport.authenticate('linkedin'), jwtController.generateSocialTokenUser);
+    app.get('/desp/v1/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+    app.get('/desp/v1/auth/google/callback', passport.authenticate('google'), jwtController.generateSocialTokenUser);
 
     // Facebook Authentication
-    app.get('/onjobs/v1/auth/facebook', passport.authenticate('facebook'));
-	app.get('/onjobs/v1/auth/facebook/callback',passport.authenticate('facebook'), jwtController.generateSocialTokenUser);
+    app.get('/desp/v1/auth/facebook', passport.authenticate('facebook'));
+	app.get('/desp/v1/auth/facebook/callback',passport.authenticate('facebook'), jwtController.generateSocialTokenUser);
 };

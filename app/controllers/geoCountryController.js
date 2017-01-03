@@ -4,10 +4,10 @@ var jwt    = require('jsonwebtoken');
 var config = require('../util/config');
 
 module.exports = {
-  countries: countries
+  geoCountries: geoCountries
 };
 
-function countries (req, res) {
+function geoCountries (req, res) {
   	var email = req.param('email');
   	var operation = req.param('operation');
 	var token = req.headers.authorization;
