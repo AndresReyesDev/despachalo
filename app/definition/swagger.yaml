@@ -1,0 +1,1511 @@
+swagger: "2.0"
+info:
+  version: desp - v1
+  title: Despachalo.com
+  description: API de servicios de Despachalo.com
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /desp/v1
+#
+tags:
+  - name: Usuario
+    description: Servicios de Usuarios
+  - name: Direccion
+    description: Servicios de Dirección de usuario
+  - name: Bolsa
+    description: Servicios de Bolsas
+  - name: Token
+    description: Servicios de Token
+  - name: Permisos
+    description: Servicios de Permisos
+  - name: Georeferencia
+    description: Servicios de Georeferencia
+  - name: Tarificar
+    description: Servicios de Tarificación
+  - name: PuntoPago
+    description: Servicios de PuntoPago
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /userLogin:
+    post:
+      tags:
+        - Usuario
+      description: Recibe el correo y contraseña del usuario para iniciar sesión en el sistema
+      # used as the method name of the controller
+      operationId: userLogin
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/UserLogin"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users:
+    get:
+      tags:
+        - Usuario
+      description: Lista todos los usuarios
+      # used as the method name of the controller
+      operationId: findUsers
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      tags:
+        - Usuario
+      description: Obtener información de usuario
+      # used as the method name of the controller
+      operationId: findUserByEmail
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      tags:
+        - Usuario
+      description: Editar usuario
+      # used as the method name of the controller
+      operationId: updateUser
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/UserEdit"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      tags:
+        - Usuario
+      description: Cambia el estado del usuario a Inactivo
+      # used as the method name of the controller
+      operationId: deleteUser
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/types:
+    get:
+      tags:
+        - Usuario
+      description: Obtener los tipos de usuario
+      # used as the method name of the controller
+      operationId: findTypesUser
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      tags:
+        - Usuario
+      description: Obtener el tipo de usuario
+      # used as the method name of the controller
+      operationId: findTypeUser
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/add:
+    post:
+      tags:
+        - Usuario
+      description: Registrar usuarios de tipo Administrador
+      # used as the method name of the controller
+      operationId: addUser
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/UserAdd"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/resetPassword:
+    get:
+      tags:
+        - Usuario
+      description: Reestablece la contraseña de un usuario Admin
+      # used as the method name of the controller
+      operationId: userResetPassword
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: admin
+          in: query
+          description: Correo del usuario administrador
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo del usuario
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/register:
+    post:
+      tags:
+        - Usuario
+      description: Registrar usuarios clientes
+      # used as the method name of the controller
+      operationId: userRegister
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/UserRegister"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/validateEmail:
+    get:
+      tags:
+        - Usuario
+      description: Validar email de usuario
+      # used as the method name of the controller
+      operationId: userValidateEmail
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo del usuario
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /bags:
+    get:
+      tags:
+        - Bolsa
+      description: Lista todas las bolsas compradas por el usuario
+      # used as the method name of the controller
+      operationId: findBags
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo del usuario
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /bag:
+    get:
+      tags:
+        - Bolsa
+      description: Lista la bolsa activa para el usuario
+      # used as the method name of the controller
+      operationId: findBag
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo del usuario
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      tags:
+        - Bolsa
+      description: Registrar bolsa
+      # used as the method name of the controller
+      operationId: addBag
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/BagAdd"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /addresses:
+    get:
+      tags:
+        - Direccion
+      description: Lista las direcciones de usuario
+      # used as the method name of the controller
+      operationId: findAllAddresses
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo del usuario
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /address:
+    get:
+      tags:
+        - Direccion
+      description: Lista las direcciones de usuario
+      # used as the method name of the controller
+      operationId: findAddress
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo del usuario
+          required: true
+          type: string
+        - name: alias
+          in: query
+          description: Alias de la direccion
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      tags:
+        - Direccion
+      description: Registrar Direcciones
+      # used as the method name of the controller
+      operationId: addAddress
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Address"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      tags:
+        - Direccion
+      description: Editar Direccion
+      # used as the method name of the controller
+      operationId: editAddress
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Address"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      tags:
+        - Direccion
+      description: Elimina una direccion
+      # used as the method name of the controller
+      operationId: deleteAddress
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/AddressDelete"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /token:
+    get:
+      tags:
+        - Token
+      description: Lista los tipos de token (bolsa)
+      # used as the method name of the controller
+      operationId: findTokens
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo del usuario
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      tags:
+        - Token
+      description: Registrar Token
+      # used as the method name of the controller
+      operationId: addToken
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Token"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      tags:
+        - Token
+      description: Editar Token
+      # used as the method name of the controller
+      operationId: updateToken
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Token"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      tags:
+        - Token
+      description: Elimina un Token
+      # used as the method name of the controller
+      operationId: deleteToken
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Token"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /permission:
+    get:
+      tags:
+        - Permisos
+      description: Lista los permisos
+      # used as the method name of the controller
+      operationId: findPermissions
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: tipo
+          in: query
+          description: ID Tipo de usuario
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      tags:
+        - Permisos
+      description: Registrar Permisos
+      # used as the method name of the controller
+      operationId: addPermission
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Permission"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      tags:
+        - Permisos
+      description: Editar Permisos
+      # used as the method name of the controller
+      operationId: permisosEditar
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Permission"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      tags:
+        - Permisos
+      description: Elimina un Permiso
+      # used as the method name of the controller
+      operationId: permisosBorrar
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/PermissionDelete"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /tarificar:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: tarificar
+    x-a127-apply: {}
+    post:
+      tags:
+        - Tarificar
+      description: Recibe los datos de origen, destino y volumetria del paquete a tarififcar con los servicios de CXP  - CDCH
+      # used as the method name of the controller
+      operationId: tarificar
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Tarificar"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      tags:
+        - Tarificar
+      description: Lista todas las tarificaciones hechas por el usuario
+      # used as the method name of the controller
+      operationId: getTarificaciones
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo del usuario
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /tarificar/internacional:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: tarificarInt
+    x-a127-apply: {}
+    post:
+      tags:
+        - Tarificar
+      description: Recibe los datos de origen, destino y volumetria del paquete a tarififcar con los servicios de FEDEX - DHL
+      # used as the method name of the controller
+      operationId: tarificarInt
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/TarificarInt"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      tags:
+        - Tarificar
+      description: Lista todas las tarificaciones internacionales hechas por el usuario
+      # used as the method name of the controller
+      operationId: getTarificacionesInt
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo del usuario
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /puntopagos/pagar/:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: botonPuntoPagos
+    x-a127-apply: {}
+    get:
+      tags:
+        - PuntoPago
+      description: Recibe monto a recaudar por PuntoPagos
+      # used as the method name of the controller
+      operationId: puntoPagosPagar
+      parameters:
+        - name: monto
+          in: query
+          description: Monto a recaudar
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /puntopagos/notificacion/:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: botonPuntoPagos
+    x-a127-apply: {}
+    post:
+      tags:
+        - PuntoPago
+      description: Punto Pagos notifica que se efectuó el pago
+      # used as the method name of the controller
+      operationId: puntoPagosNotificacion
+      parameters:
+        - name: fecha
+          in: header
+          description: Fecha según la especificación RFC1123
+          required: true
+          type: string
+        - name: autorizacion
+          in: header
+          description: Firma del mensaje utilizando la llave secreta
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Notificacion"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /puntopagos/validar/:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: botonPuntoPagos
+    x-a127-apply: {}
+    get:
+      tags:
+        - PuntoPago
+      description: Recibe monto a recaudar por PuntoPagos
+      # used as the method name of the controller
+      operationId: puntoPagosValidar
+      parameters:
+        - name: idGenerado
+          in: query
+          description: Id de transacción generado por Punto Pagos
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /geo/regiones:
+    get:
+      tags:
+        - Georeferencia
+      description: Operaciones de regiones en la Base de datos
+      # used as the method name of the controller
+      operationId: geoRegiones
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: curier
+          in: query
+          description: cxp - cdch
+          required: false
+          type: string
+        - name: operation
+          in: query
+          description: servicio - listar
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /geo/provincias:
+    get:
+      tags:
+        - Georeferencia
+      description: Operaciones de provincias en la Base de datos
+      # used as the method name of the controller
+      operationId: geoProvincias
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: operation
+          in: query
+          description: servicio - listar
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /geo/comunas:
+    get:
+      tags:
+        - Georeferencia
+      description: Operaciones de comunas en la Base de datos
+      # used as the method name of the controller
+      operationId: geoComunas
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: curier
+          in: query
+          description: Transportista
+          required: false
+          type: string
+        - name: operation
+          in: query
+          description: servicio - listar
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /geo/paises:
+    get:
+      tags:
+        - Georeferencia
+      description: Operaciones de paises en la Base de datos
+      # used as the method name of the controller
+      operationId: paises
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Correo de usuario
+          required: true
+          type: string
+        - name: operation
+          in: query
+          description: listar - insertar
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+# complex objects have schema definitions
+definitions:
+  User:
+    type: object
+    properties:
+      email:
+        description: Correo del usuario
+        type: string
+  UserLogin:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+        email:
+          description: Correo del usuario
+          type: string
+        password:
+          description: Contraseña del usuario
+          type: string
+          format: password
+  UserRegister:
+    type: object
+    required:
+      - email
+    properties:
+      email:
+        description: Correo del usuario
+        type: string
+      name:
+        description: Nombre del usuario
+        type: string
+      lastname:
+        description: Apellido del usuario
+        type: string
+      type:
+        description: Tipo del usuario
+        type: string
+  UserAdd:
+    type: object
+    required:
+      - email
+      - name
+      - lastname
+      - type
+      - rut
+    properties:
+      email:
+        description: Correo del usuario
+        type: string
+      name:
+        description: Nombre del usuario
+        type: string
+      lastname:
+        description: Apellido del usuario
+        type: string
+      type:
+        description: Tipo3 del usuario
+        type: string
+      rut:
+        description: Rut del usuario
+        type: string
+  UserEdit:
+    type: object
+    required:
+      - email
+    properties:
+      email:
+        description: Correo del usuario
+        type: string
+      name:
+        description: Nombre del usuario
+        type: string
+      lastname:
+        description: Apellido del usuario
+        type: string
+      password:
+        description: Contraseña del usuario
+        type: string
+        format: password
+      rut:
+        description: Rut del usuario
+        type: string
+      type:
+        description: Tipo del usuario
+        type: string
+  Address:
+    type: object
+    required:
+      - email
+      - alias
+      - nameCalle
+      - number
+      - department
+      - city
+      - commune
+      - country
+      - nameContact
+      - emailContact
+      - phoneContact
+    properties:
+      email:
+        description: Correo del usuario
+        type: string
+      alias:
+        description: Nombre de la dirección
+        type: string
+      nameCalle:
+        description: Correo del usuario
+        type: string
+      number:
+        description: Correo del usuario
+        type: string
+      department:
+        description: Correo del usuario
+        type: string
+      city:
+        description: Correo del usuario
+        type: string
+      commune:
+        description: Correo del usuario
+        type: string
+      country:
+        description: Correo del usuario
+        type: string
+      postalCode:
+        description: Correo del usuario
+        type: string
+      nameContact:
+        description: Correo del usuario
+        type: string
+      emailContact:
+        description: Correo del usuario
+        type: string
+      phoneContact:
+        description: Correo del usuario
+        type: string
+      observations:
+        description: Correo del usuario
+        type: string
+      checkDelivery:
+        description: Correo del usuario
+        type: string
+      checkRetirement:
+        description: Correo del usuario
+        type: string
+  AddressDelete:
+    type: object
+    required:
+      - email
+      - alias
+    properties:
+      email:
+        description: Correo del usuario
+        type: string
+      alias:
+        description: Nombre de la dirección
+        type: string
+  Token:
+    type: object
+    required:
+      - email
+      - name
+    properties:
+      email:
+        description: Correo del usuario Admin
+        type: string
+      name:
+        description: Nombre
+        type: string
+      numQuote:
+        description: Número de cotizaciones
+        type: string
+      rate:
+        description: Costo del Token
+        type: string
+  Permission:
+    type: object
+    required:
+      - typeUser
+    properties:
+      typeUser:
+        description: Tipo de Usuario
+        type: number
+      createUser:
+        description: Boolean permiso
+        type: boolean
+      editUser:
+        description: Boolean permiso
+        type: boolean
+      editPermission:
+        description: Boolean permiso
+        type: boolean
+      resetPassword:
+        description: Boolean permiso
+        type: boolean
+  PermissionDelete:
+    type: object
+    required:
+      - typeUser
+    properties:
+      typeUser:
+        description: Tipo de Usuario
+        type: number
+  BagAdd:
+    type: object
+    required:
+      - email
+      - type
+    properties:
+      email:
+        description: Correo del usuario
+        type: string
+      type:
+        description: Tipo de bolsa prepago
+        type: string
+  Tarificar:
+    type: object
+    required:
+      - comunaOrigen
+      - comunaDestino
+      - peso
+      - ancho
+      - alto
+      - largo
+    properties:
+      comunaOrigen:
+        description: Comuna origen
+        type: string
+      comunaDestino:
+        description: Comuna destino
+        type: string
+      peso:
+        description: Peso (kg)
+        type: number
+        minimum: 1
+      ancho:
+        description: Ancho (m)
+        type: number
+        minimum: 1
+      alto:
+        description: Alto (m)
+        type: number
+        minimum: 1
+      largo:
+        description: Largo (m)
+        type: number
+        minimum: 1
+  TarificarInt:
+    type: object
+    required:
+      - paisOrigen
+      - estadoOrigen
+      - ciudadOrigen
+      - codigoPostalOrigen
+      - paisDestino
+      - estadoDestino
+      - ciudadDestino
+      - codigoPostalDestino
+      - peso
+      - ancho
+      - alto
+      - largo
+    properties:
+      paisOrigen:
+        description: Pais origen
+        type: string
+      estadoOrigen:
+        description: Estado origen
+        type: string
+      ciudadOrigen:
+        description: Ciudad origen
+        type: string
+      codigoPostalOrigen:
+        description: Codigo Postal origen
+        type: string
+      paisDestino:
+        description: Pais destino
+        type: string
+      estadoDestino:
+        description: Estado destino
+        type: string
+      ciudadDestino:
+        description: Ciudad destino
+        type: string
+      codigoPostalDestino:
+        description: Codigo Postal destino
+        type: string
+      peso:
+        description: Peso (kg)
+        type: number
+      ancho:
+        description: Ancho (cm)
+        type: number
+      alto:
+        description: Alto (cm)
+        type: number
+      largo:
+        description: Largo (cm)
+        type: number
+  Notificacion:
+    type: object
+    required:
+      - token
+      - trx_id
+      - medio_pago
+      - monto
+      - fecha_aprovacion
+      - numero_tarjeta
+      - num_cuotas
+      - tipo_cuotas
+      - valor_cuota
+      - primer_vencimiento
+      - numero_operacion
+      - codigo_autorizacion
+    properties:
+      token:
+        type: string
+        description: Token
+      trx_id:
+        type: string
+        description: Id de transacción
+      medio_pago:
+        type: string
+        description: Medio de pago
+      monto:
+        type: string
+        description: Monto
+      fecha_aprovacion:
+        type: string
+        description: Fecha de aprovación
+      numero_tarjeta:
+        type: string
+        description: Número de tarjeta
+      num_cuotas:
+        type: string
+        description: Número de cuotas
+      tipo_cuotas:
+        type: string
+        description: Número de cuotas
+      valor_cuota:
+        type: string
+        description: Valor de cuotas
+      primer_vencimiento:
+        type: string
+        description: Primer vencimiento
+      numero_operacion:
+        type: string
+        description: Número de operación
+      codigo_autorizacion:
+        type: string
+        description: Código de autorización
+  DespachaloResponse:
+    type: string
+  ErrorResponse:
+    type: string
