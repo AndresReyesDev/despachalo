@@ -58,6 +58,8 @@ module.exports = function(passport) {
                     newUser.name = profile.name.givenName; // for local user
                     newUser.lastname = profile.name.familyName; // for local user
                     newUser.provider = profile.provider; // for local user
+                    newUser.status = true; // for local user
+                    newUser.type = 3; // for local user
 
                     // save the user
                     newUser.save(function(err) {
@@ -108,6 +110,8 @@ module.exports = function(passport) {
                     newUser.name = profile.name.givenName || name[0];
                     newUser.lastname = profile.name.familyName || name[1];
                     newUser.provider = profile.provider; // for local user
+                    newUser.status = true; // for local user
+                    newUser.type = 3; // for local user
 
                     // save the user
                     newUser.save(function(err) {
