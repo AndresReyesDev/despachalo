@@ -97,7 +97,8 @@ function findUsers (req, res) {
 
 function findUserByEmail (req, res) {
 	
-	var email = req.param('email');
+	var body = req.body;
+	var email = body.email;
 	var token = req.headers.authorization;
     // verifies secret and checks exp
     jwt.verify(token, config.jwt.secret, function (err, decoded) {
@@ -305,7 +306,7 @@ function userResetPassword (req, res) {
 	});
 }
 
-function updateUser (req, response) {
+function updateUser (req, res) {
   
   var body = req.body;
   var email = body.email;
@@ -334,11 +335,11 @@ function updateUser (req, response) {
 						encrypt.cryptPassword(password, function (err, hash) { 
 							if (!err && hash) {
 								user.password = hash;
-								save(user, response);
+								save(user, res);
 							}
 						});
 					} else {
-						save(user, response);
+						save(user, res);
 					}
 				} else {
 					res.status(404).send({ code: 404, desc: "User does'n exist"});
@@ -356,55 +357,49 @@ function userRegister (req, res) {
   	var body = req.body;
   	var email = body.email;
 
-	var token = req.headers.authorization;
-	// verifies secret and checks exp
-	jwt.verify(token, config.jwt.secret, function(err, decoded) {
-	    if (err) {
-	      res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
-	      console.log('INFO: Fallo en la autenticación de Token: ' + err);
-	    } else {
-	      // if everything is good, save to request for use in other routes
-	      req.decoded = decoded;
-	        User.findOne({email:email}, function (err, user) {
-				if (!err) {
-					if (!user) {
-						
-						var user = new User ({
-							email: email,
-							name: body.name,
-							lastname: body.lastname,
-							type: body.type
-						});
-						
-						user.save(function (err, response) {
-							if (!err) {
-								console.log('User successfully registered');
-								var type = 'Visitante';
-								saveBag(response, type, res);
-								// Send mail de validación de correo
-								Mailer.sendMailValidation(user, null);
-							} else {
-								res.status(500).send({ code: 500, desc: err.message});
-								console.log('ERROR: ' + err);
-							}
-						});	
+    User.findOne({email:email}, function (err, user) {
+		if (!err) {
+			if (!user) {
+				
+				var token = jwt.sign({email: email}, config.jwt.secret, {
+		          expiresIn: '1d' // expires in 24 hours
+		        });
+
+				var user = new User ({
+					email: email,
+					name: body.name,
+					lastname: body.lastname,
+					type: body.type,
+					token: token
+				});
+				
+				user.save(function (err, response) {
+					if (!err) {
+						console.log('User successfully registered');
+						var type = 'Visitante';
+						saveBag(response, type, res);
+						// Send mail de validación de correo
+						Mailer.sendMailValidation(user, null);
 					} else {
-						res.status(404).send({ code: 404, desc: "User does exist"});
-						console.log("LOG: User does exist");
+						res.status(500).send({ code: 500, desc: err});
+						console.log('ERROR: ' + err);
 					}
-				} else {
-					res.status(500).send({ code: 501, desc: err.message});
-					console.log('ERROR: ' + err);
-				}
-			});
-	    }
+				});	
+			} else {
+				res.status(404).send({ code: 404, desc: "User does exist"});
+				console.log("LOG: User does exist");
+			}
+		} else {
+			res.status(500).send({ code: 501, desc: err});
+			console.log('ERROR: ' + err);
+		}
 	});
 }
 
 function saveBag (user, type, res) {
 	Bag.getQuotes(type, function (err, numQuote) {
 		if (!err && numQuote) {
-			var bolsa = new Bolsa({
+			var bag = new Bag ({
 				email: user.email,
 				type: type,
 				numQuote: numQuote,
@@ -416,12 +411,12 @@ function saveBag (user, type, res) {
 					res.send(user);
 					console.log('LOG: Visitor bag successfully assigned');
 				} else {
-					res.status(500).send({ code: 502, desc: err.message});
+					res.status(500).send({ code: 502, desc: err});
 					console.log('ERROR: ' + err);
 				}
 			});
 		} else {
-			res.status(500).send({ code: 503, desc: err.message});
+			res.status(500).send({ code: 503, desc: err});
 			console.log('ERROR: ' + err);
 		}
 	});
@@ -430,38 +425,28 @@ function saveBag (user, type, res) {
 function userValidateEmail (req, res) {
 
 	var email = req.param('email');
-	var token = req.headers.authorization;
-	// verifies secret and checks exp
-	jwt.verify(token, config.jwt.secret, function(err, decoded) {
-	    if (err) {
-	      res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
-	      console.log('INFO: Fallo en la autenticación de Token: ' + err);
-	    } else {
-	      // if everything is good, save to request for use in other routes
-	      req.decoded = decoded;
-	        User.findOne({email:email}, function (err, user) {
-			  	if (!err && user) {
-			  		if (!user.status){
-			  			user.status = true;
-			  			user.save(function (err, response) {
-							if (!err) {
-								res.send(user);
-								console.log('User validated successfully');
-							} else {
-								res.status(500).send({ code: 500, desc: err.message});
-								console.log('ERROR: ' + err);
-							}
-						});
-			  		} else {
-			  			res.status(202).send({ code: 202, desc: 'User already validated'});
-						console.log('LOG: User already validated');
-			  		}
-			  	} else {
-			  		res.status(404).send({ code: 404, desc: "User doesn't exist"});
-					console.log("LOG: User doesn't exist");
-			  	}
-			});
-	    }
+
+    User.findOne({email:email}, function (err, user) {
+	  	if (!err && user) {
+	  		if (!user.status){
+	  			user.status = true;
+	  			user.save(function (err, response) {
+					if (!err) {
+						res.send(user);
+						console.log('User validated successfully');
+					} else {
+						res.status(500).send({ code: 500, desc: err.message});
+						console.log('ERROR: ' + err);
+					}
+				});
+	  		} else {
+	  			res.status(202).send({ code: 202, desc: 'User already validated'});
+				console.log('LOG: User already validated');
+	  		}
+	  	} else {
+	  		res.status(404).send({ code: 404, desc: "User doesn't exist"});
+			console.log("LOG: User doesn't exist");
+	  	}
 	});
 }
 

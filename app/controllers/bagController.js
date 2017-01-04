@@ -69,7 +69,7 @@ function findBags (req, res) {
   });
 }
 
-function addBag (req, response) {
+function addBag (req, res) {
   // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
   var body = req.body;
   var email = body.email;
@@ -93,14 +93,14 @@ function addBag (req, response) {
                       if (userBag.type == type) {
                         // Acumular numCotizaciones si se compra una nueva bolsa del mismo tipo
                         var remaining = parseInt(userBag.numQuote) - parseInt(user.quotes);
-                        saveBag(user, type, remaining, response);
+                        saveBag(user, type, remaining, res);
                       } else {
                         // Crear nueva bolsa de otro tipo y resetear cotizaciones de usuario
-                        saveBag(user, type, 0, response);
+                        saveBag(user, type, 0, res);
                       }
                     } else {
                       // Crear nueva bolsa de otro tipo y resetear cotizaciones de usuario
-                      saveBag(user, type, 0, response);
+                      saveBag(user, type, 0, res);
                     }
                   } else {
                     res.status(500).send({ code: 500, desc: err.message});
@@ -120,8 +120,8 @@ function addBag (req, response) {
   });
 }
 
-function saveBag (user, type, remaining, response) {
-  Bag.getQuotes(tipo, function (err, numQuote) {
+function saveBag (user, type, remaining, res) {
+  Bag.getQuotes(type, function (err, numQuote) {
     if (!err && numQuote) {
       var bag = new Bag ({
         email: user.email,
@@ -130,9 +130,9 @@ function saveBag (user, type, remaining, response) {
         purchased: new Date
       });
 
-      bag.save(function (err, res){
+      bag.save(function (err, response){
         if (!err) {
-          response.send(bag);
+          res.send(bag);
           console.log('Bolsa prepago comprada exitosamente');
         } else {
           res.status(500).send({ code: 501, desc: err.message});

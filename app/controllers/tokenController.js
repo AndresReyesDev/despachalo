@@ -5,13 +5,13 @@ var jwt    = require('jsonwebtoken');
 var config = require('../util/config');
 
 module.exports = {
-  findTokens: findTokens,
+  findToken: findToken,
   addToken: addToken,
   updateToken: updateToken,
   deleteToken: deleteToken
 };
 
-function findTokens (req, res) {
+function findToken (req, res) {
   var email = req.param('email');
   var token = req.headers.authorization;
   // verifies secret and checks exp
@@ -24,7 +24,7 @@ function findTokens (req, res) {
       req.decoded = decoded;
       User.findOne({email:email}, function (err, user) {
         if (!err) {
-          if (user.type == '1') {
+          if (user && user.type == '1') {
             Token.find({}, function (err, token) {
               if (!err && token) {
                 res.send(token);
@@ -60,10 +60,10 @@ function addToken (req, res) {
           req.decoded = decoded;
           User.findOne({email:email}, function (err, user) {
               if (!err) {
-                if (user.type == '1') {
-                  
+                if (user && user.type == '1') {
+
                   var token = new Token({
-                    name: body.nombre,
+                    name: body.name,
                     numQuote: body.numQuote,
                     rate: body.rate
                   });
@@ -105,7 +105,7 @@ function updateToken(req, res) {
           req.decoded = decoded;
           User.findOne({email:email}, function (err, user) {
               if (!err) {
-                if (user.type == '1') {
+                if (user && user.type == '1') {
                   
                   Token.findOne({name:name}, function (err, token) {
                     if (token) {
@@ -144,7 +144,7 @@ function updateToken(req, res) {
 function deleteToken (req, res) {
     var body = req.body;
     var email = body.email;
-    var nombre = body.nombre;
+    var name = body.name;
     var token = req.headers.authorization;
     // verifies secret and checks exp
     jwt.verify(token, config.jwt.secret, function(err, decoded) {
@@ -156,7 +156,7 @@ function deleteToken (req, res) {
           req.decoded = decoded;
           User.findOne({email:email}, function (err, user) {
               if (!err) {
-                if (user.type == '1') {
+                if (user && user.type == '1') {
                   
                   Token.findOne({name:name}, function (err, token) {
                     if (token) {
@@ -171,7 +171,7 @@ function deleteToken (req, res) {
                         });
                     } else {
                       res.status(404).send({ code: 404, desc: "Token doesn't exist"});
-                      console.log("Token: User doesn't exist");
+                      console.log("Token: Token doesn't exist");
                     }
                   });
                 } else {

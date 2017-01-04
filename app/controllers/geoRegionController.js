@@ -1,5 +1,5 @@
 'use strict';
-var Region = require('../models/regiones');
+var Region = require('../models/region');
 var Georeference = require('../util/georeference');
 var geoDSPL = require('../util/data/geoDSPL');
 var search = require('../util/search');
@@ -57,7 +57,7 @@ function geoRegions (req, res) {
 		  	} else {
 		  		res.status(400).send({ code: 400, desc: 'Curier is required for this operation'});
 		  	}
-		  } else if (operation == "listar"){
+		  } else if (operation == "listar") {
 		  	Region.find(function (err, allRegions){
 				if (!err && allRegions.length != 0) {
 					res.send(allRegions);

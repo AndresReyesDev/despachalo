@@ -1,5 +1,5 @@
 var bcrypt = require('bcrypt');
-var config = require('./config/config.js');
+var config = require('./config');
 
 exports.cryptPassword = function(password, callback) {
    bcrypt.genSalt(config.bcrypt.rounds, function(err, salt) {

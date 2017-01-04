@@ -1,5 +1,5 @@
 var nodemailer = require('nodemailer');
-var config = require('./config.js');
+var config = require('./config');
 
 module.exports = {
   sendMailValidation: sendMailValidation,
@@ -14,11 +14,11 @@ function sendMailValidation(user, psw) {
 	var html = '';
 	if (psw) {
 		html = 'Hola, bienvenido a Despachalo.com ' + '<br/>' +
-	    	  '<b> Valida tu registro en el siguiente enlace </b>' + config.mail.confirmar + user.email + '<br/>' + 
+	    	  '<b> Valida tu registro en el siguiente enlace </b>' + config.mail.confirm + user.email + '<br/>' + 
 	    	  '<b> Se ha generado una contraseña aleatoria:  </b>' + psw; // html body
 	} else {
 		html = 'Hola, bienvenido a Despachalo.com ' + '<br/>' +
-	    	  '<b> Valida tu registro en el siguiente enlace </b>' + config.mail.confirmar + user.email; // html body
+	    	  '<b> Valida tu registro en el siguiente enlace </b>' + config.mail.confirm + user.email; // html body
 	}
 	var mailOptions = {
 	    from: '"Despachalo.com " <'+ config.mail.user +'>', // sender address

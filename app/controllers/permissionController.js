@@ -5,14 +5,14 @@ var jwt    = require('jsonwebtoken');
 var config = require('../util/config');
 
 module.exports = {
-  findPermissions: findPermissions,
+  findPermission: findPermission,
   addPermission: addPermission,
   updatePermission: updatePermission,
   deletePermission: deletePermission
 };
 
-function findPermissions (req, res) {
-	var tipoUsuario = req.param('tipo');
+function findPermission (req, res) {
+	var typeUser = req.param('typeUser');
   	var token = req.headers.authorization;
 	// verifies secret and checks exp
 	jwt.verify(token, config.jwt.secret, function(err, decoded) {
@@ -22,14 +22,14 @@ function findPermissions (req, res) {
 	    } else {
 	      // if everything is good, save to request for use in other routes
 	      req.decoded = decoded;
-		    if (tipoUsuario) {
+		    if (typeUser) {
 				Permission.findOne({typeUser:typeUser}, function (err, permission) {
 		  			if (!err) {
 						if (permission) {
 						    res.send(permission);
 						} else {
-							res.status(404).send({ code: 404, descripcion: 'No permissions for type (' + tipoUsuario + ')'});
-							console.log('LOG: No permissions for type (' + tipoUsuario + ')');
+							res.status(404).send({ code: 404, descripcion: 'No permissions for type (' + typeUser + ')'});
+							console.log('LOG: No permissions for type (' + typeUser + ')');
 						}
 					} else {
 						res.status(500).send({ code: 500, desc: err.message});
@@ -130,8 +130,8 @@ function updatePermission (req, res) {
 			if (!err) {
 				if (user) {
 					Permission.findOne({typeUser:user.type}, function (err, per) {
-						if (per.editarPermisos) {
-							Permisos.findOne({typeUser:typeUser}, function (err, permission) {
+						if (per.editPermission) {
+							Permission.findOne({typeUser:typeUser}, function (err, permission) {
 								if (!err) {
 									if (permission) {
 

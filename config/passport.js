@@ -1,5 +1,4 @@
 // load all the things we need
-var LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 

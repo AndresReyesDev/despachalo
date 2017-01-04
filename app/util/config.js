@@ -78,7 +78,7 @@ module.exports = {
 		user: 'manuelvargasmejia@gmail.com',
 		pass: 'davidvargas+08',
 		admin: 'mvargas@formax.cl',
-		confirm: 'http://localhost:10010/desp/v1/usuario/validar?email='
+		confirm: 'http://localhost:3000/desp/v1/users/validate/email?email='
 	},
 
 	// SendGrid API Key
@@ -90,7 +90,7 @@ module.exports = {
 	development: {
 		port: '3000',
 		database: {
-			host: 'localhost',
+			host: '127.0.0.1',
 			name: 'despachalo-dev'
 		}
 	},

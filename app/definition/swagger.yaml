@@ -4,7 +4,7 @@ info:
   title: Despachalo.com
   description: API de servicios de Despachalo.com
 # during dev, should point to your local machine
-host: localhost:10010
+host: localhost:3000
 # basePath prefixes all resource paths 
 basePath: /desp/v1
 #
@@ -292,11 +292,6 @@ paths:
       # used as the method name of the controller
       operationId: userRegister
       parameters:
-        - name: authorization
-          in: header
-          description: Json Web Token
-          required: true
-          type: string
         - name: data
           in: body
           required: true
@@ -321,11 +316,6 @@ paths:
       # used as the method name of the controller
       operationId: userValidateEmail
       parameters:
-        - name: authorization
-          in: header
-          description: Json Web Token
-          required: true
-          type: string
         - name: email
           in: query
           description: Correo del usuario
@@ -461,7 +451,7 @@ paths:
     get:
       tags:
         - Direccion
-      description: Lista las direcciones de usuario
+      description: Lista direccion de usuario
       # used as the method name of the controller
       operationId: findAddress
       parameters:
@@ -1027,7 +1017,7 @@ paths:
           type: string
         - name: operation
           in: query
-          description: servicio - listar
+          description: servicio - listar - insertar
           required: true
           type: string
       responses:
@@ -1115,11 +1105,6 @@ paths:
         - name: authorization
           in: header
           description: Json Web Token
-          required: true
-          type: string
-        - name: email
-          in: query
-          description: Correo de usuario
           required: true
           type: string
         - name: operation

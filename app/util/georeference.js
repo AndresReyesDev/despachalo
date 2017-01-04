@@ -1,7 +1,7 @@
 'use strict';
 var soap = require('soap');
 var restClient = require('./wsClient/restClient');
-var config = require('./config/config.js');
+var config = require('./config');
 
 module.exports = {
   regionsCXP: regionsCXP,

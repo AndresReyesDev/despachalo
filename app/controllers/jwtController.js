@@ -49,7 +49,7 @@ exports.generateSocialTokenUser = function(req, res) {
 
 //GET - Return token for use services
 exports.resetToken = function(req, res) {
-
+    console.log(req);
     if (req.body.email) {
         var tokenUser = {
             email: req.body.email

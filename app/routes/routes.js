@@ -38,7 +38,7 @@ module.exports = function (app, passport) {
 	// Bags
 	app.get('/desp/v1/bags', BagController.findBags);
 	app.get('/desp/v1/bag', BagController.findBag);
-	app.post('/desp/v1/bag', UserController.addBag);
+	app.post('/desp/v1/bag', BagController.addBag);
 
 	// Address
 	app.get('/desp/v1/addresses', AddressController.findAllAddresses);
@@ -74,8 +74,8 @@ module.exports = function (app, passport) {
 	app.get('/desp/v1/geo/regions', GeoRegionController.geoRegions);
 
 	// Json Web Token
-	app.post('/desp/v1/token/:id', jwtController.resetToken);
-	app.get('/desp/v1/token', jwtController.generateToken);
+	app.post('/desp/v1/jwtoken', jwtController.resetToken);
+	app.get('/desp/v1/jwtoken', jwtController.generateToken);
 
 	// Google Authentication
     app.get('/desp/v1/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));

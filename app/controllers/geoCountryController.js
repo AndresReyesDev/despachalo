@@ -8,7 +8,7 @@ module.exports = {
 };
 
 function geoCountries (req, res) {
-  	var email = req.param('email');
+
   	var operation = req.param('operation');
 	var token = req.headers.authorization;
 	// verifies secret and checks exp
@@ -25,35 +25,42 @@ function geoCountries (req, res) {
 						if (countries.length > 0) {
 							res.send(countries);
 						} else {
-							res.send({ code: 200, desc: "Countries does exist"});
+							res.send({ code: 200, desc: "Countries doesn't exist"});
 						}
 					} else {
 						res.status(500).send({ code: 500, desc: "Error find countries"});
 					}
 				}).sort('name');
 		  	} else {
-				var countries = require('../util/data/countries');
-				var inserts = 0;
-				var errors = 0;
-				
-				for (var i = countries.countries.length - 1; i >= 0; i--) {
-					var country = new Pais({
-						name: countries.countries[i].Name,
-						code: countries.countries[i].Code
-					});
-					country.save(function (err, response) {
-						if (!err) {
-							inserts=inserts+1;
-							console.log('Countries successfully inserted');
-						} else {
-							errors=errors+1;
-							console.log('ERROR: ' + err);
-						}
-						if (inserts + errors == countries.countries.length) {
-							res.status(200).send({ code: 200, descripcion: '(' + inserts + ') countries with (' + errors + ') errors have been entered'});
-						}
-					});
-				};
+
+		  		Country.count({}, function (err, count){
+    				if (count != 0) {
+    					res.send({ code: 200, desc: "Countries does exist"});
+    				} else {
+    					var countries = require('../util/data/countries');
+						var inserts = 0;
+						var errors = 0;
+						
+						for (var i = countries.countries.length - 1; i >= 0; i--) {
+							var country = new Country ({
+								name: countries.countries[i].Name,
+								code: countries.countries[i].Code
+							});
+							country.save(function (err, response) {
+								if (!err) {
+									inserts=inserts+1;
+									console.log('Countries successfully inserted');
+								} else {
+									errors=errors+1;
+									console.log('ERROR: ' + err);
+								}
+								if (inserts + errors == countries.countries.length) {
+									res.status(200).send({ code: 200, descripcion: '(' + inserts + ') countries with (' + errors + ') errors have been entered'});
+								}
+							});
+						};
+    				}
+				})
 		  	}
 	    }
 	});

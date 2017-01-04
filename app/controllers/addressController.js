@@ -58,17 +58,24 @@ function findAddress (req, res) {
 	      // if everything is good, save to request for use in other routes
 	      req.decoded = decoded;
 				if (email && alias) {
-					Address.findOne({email:email, alias:alias}, function (err, dir) {
-						if (!err) {
-							if (dir) {
-								res.send(dir);
-							} else {
-								res.status(404).send({ code: 404, desc: "Address doesn't exist"});
-								console.log("ERROR: Address doesn't exist");
-							}
+					User.findOne({email:email}, function (err, user) {
+						if (!err && user) {
+							Address.findOne({email:email, alias:alias}, function (err, dir) {
+								if (!err) {
+									if (dir) {
+										res.send(dir);
+									} else {
+										res.status(404).send({ code: 404, desc: "Address doesn't exist"});
+										console.log("ERROR: Address doesn't exist");
+									}
+								} else {
+									res.status(500).send({ code: 500, desc: 'Find address error'});
+									console.log('ERROR: Find addresses error');
+								}
+							});	
 						} else {
-							res.status(500).send({ code: 500, desc: 'Find address error'});
-							console.log('ERROR: Find addresses error');
+							res.status(500).send({ code: 500, desc: "User doesn't exist"});
+							console.log("ERROR: User doesn't exist");
 						}
 					});
 				} else {
@@ -108,7 +115,7 @@ function addAddress (req, res) {
 	      req.decoded = decoded;
 	      User.findOne({email:email}, function (err, user) {
 					if (!err) {
-						if (user.status) {
+						if (user && user.status) {
 							
 							Address.findOne({email:email, alias:alias}, function (err, dir) {
 								if (!err) {
@@ -191,8 +198,7 @@ function updateAddress (req, res) {
 		      req.decoded = decoded;
 		      User.findOne({email:email}, function (err, user) {
 						if (!err) {
-							if (user.status) {
-								
+							if (user && user.status) {
 								Address.findOne({email:email, alias:alias}, function (err, dir) {
 									if (!err) {
 										if (dir) {
@@ -204,7 +210,7 @@ function updateAddress (req, res) {
 										  	if (commune != '') dir.commune = commune;
 										  	if (country != '') dir.country = country;
 										  	if (postalCode != '') dir.postalCode = postalCode;
-										  	if (nombreContact != '') dir.nombreContact = nombreContact;
+										  	if (nameContact != '') dir.nameContact = nameContact;
 										  	if (emailContact != '') dir.emailContact = emailContact;
 										  	if (phoneContact != '') dir.phoneContact = phoneContact;
 										  	if (observations != '') dir.observations = observations;
@@ -263,8 +269,8 @@ function deleteAddress (req, res) {
 				            if (dir) {
 				                dir.remove(function (err, response) {
 				                  if (!err) {
-				                    res.send({ code: 200, desc: 'Company deleted'});
-				                    console.log('LOG: Company successfully deleted');
+				                    res.send({ code: 200, desc: 'Address deleted'});
+				                    console.log('LOG: Address successfully deleted');
 				                  } else {
 				                    if(err) res.status(500).send({ code: 500, desc: err.message});
 				                    console.log('ERROR: ' + err);

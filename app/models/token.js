@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 var config = require('../util/config.js');
 
 var token = new Schema({
-	nombre: String,
+	name: String,
 	numQuote: String,
 	rate: String
 });

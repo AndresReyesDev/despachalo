@@ -19,4 +19,4 @@ var address = new Schema({
 	checkRetirement: { type: Boolean, default: false }
 });
 
-module.exports = mongoose.model('Direccion', address);
+module.exports = mongoose.model('Address', address);
