@@ -2,7 +2,7 @@
 var Rates = require('../util/rates');
 var User = require('../models/user');
 var Bag = require('../models/bag');
-var QuoteInt = require('../models/quote');
+var QuoteInt = require('../models/quoteInt');
 var jwt    = require('jsonwebtoken');
 var config = require('../util/config');
 
@@ -18,7 +18,7 @@ function ratesInt (req, response) {
   // Origin
   var countryOrigin = body.countryOrigin;
   var stateOrigin = body.stateOrigin;
-  var cityOrigen = body.cityOrigen;
+  var cityOrigin = body.cityOrigin;
   var postalCodeOrigin = body.postalCodeOrigin;
   // Destination
   var countryDestination = body.countryDestination;
@@ -38,7 +38,7 @@ function ratesInt (req, response) {
   // verifies secret and checks exp
   jwt.verify(token, config.jwt.secret, function(err, decoded) {
       if (err) {
-        res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+        response.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
         console.log('INFO: Fallo en la autenticación de Token: ' + err);
       } else {
         // if everything is good, save to request for use in other routes
@@ -71,14 +71,14 @@ function ratesInt (req, response) {
 
                         // Construir respuesta conjunta
                         if (tarDHL) {
-                          services(user, tarFDX, tarDHL, peso, response);
+                          services(user, tarFDX, tarDHL, weight, response);
                         }
                       }
 
                       var addressFrom = {
                         "pais": countryOrigin,
                         "estado": stateOrigin,
-                        "ciudad": cityOrigen,
+                        "ciudad": cityOrigin,
                         "codigoPostal": postalCodeOrigin
                       }
                       var addressTo = {
@@ -95,9 +95,9 @@ function ratesInt (req, response) {
                       }
 
                       // Tarificacion FEDEX
-                      //tarificador.tarificarFDX(addressFrom, addressTo, parcel, callback);
+                      //Rates.tarificarFDX(addressFrom, addressTo, parcel, callback);
                       // Tarificacion DHL
-                      tarificador.shippo(addressFrom, addressTo, parcel, callback);
+                      Rates.shippo(addressFrom, addressTo, parcel, callback);
 
                       user.quotes++;
                       user.save(function (err, res) {
@@ -127,7 +127,7 @@ function ratesInt (req, response) {
 }
 
 function services (user, tarFDX, tarDHL, pesoPieza, response) {
-
+  
   if (tarDHL.rates_list.length == 0) {
     console.log('ERROR: Ocurrio un error al consumir servicio DHL (' + tarDHL.messages[0] + ') para el usuario <' + user.email + '>');
     response.send(tarDHL.messages[0]);

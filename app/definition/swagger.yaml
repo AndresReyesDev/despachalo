@@ -37,6 +37,42 @@ consumes:
 produces:
   - application/json
 paths:
+  /auth/google:
+    get:
+      tags:
+        - Usuario
+      description: Inicio de session Google
+      # used as the method name of the controller
+      operationId: authenticateGoogle
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /auth/facebook:
+    get:
+      tags:
+        - Usuario
+      description: Inicio de session Facebook
+      # used as the method name of the controller
+      operationId: authenticateFacebook
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /users/login:
     post:
       tags:
@@ -853,7 +889,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /ratesInt:
+  /rates/international:
     post:
       tags:
         - Tarificar

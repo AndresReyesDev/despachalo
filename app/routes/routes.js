@@ -60,12 +60,12 @@ module.exports = function (app, passport) {
 	app.delete('/desp/v1/permission', PermissionController.deletePermission);
 
 	// Rates
-	app.get('/desp/v1/rates', RatesController.rates);
-	app.post('/desp/v1/rates', RatesController.getRates);
+	app.get('/desp/v1/rates', RatesController.getRates);
+	app.post('/desp/v1/rates', RatesController.rates);
 
 	// Rates Int
-	app.get('/desp/v1/ratesInt', RatesIntController.ratesInt);
-	app.post('/desp/v1/ratesInt', RatesIntController.getRatesInt);
+	app.get('/desp/v1/rates/international', RatesIntController.getRatesInt);
+	app.post('/desp/v1/rates/international', RatesIntController.ratesInt);
 
 	// Georeference
 	app.get('/desp/v1/geo/communes', GeoCommuneController.geoCommunes);

@@ -12,7 +12,7 @@ module.exports = {
   getRates: getRates
 };
 
-function rates(req, response) {
+function rates (req, response) {
 
   var email = req.param('email');
   var token = req.headers.authorization;
@@ -30,7 +30,7 @@ function rates(req, response) {
   // verifies secret and checks exp
   jwt.verify(token, config.jwt.secret, function(err, decoded) {
     if (err) {
-      res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+      response.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
       console.log('INFO: Fallo en la autenticación de Token: ' + err);
     } else {
       // if everything is good, save to request for use in other routes
@@ -144,6 +144,8 @@ function services (user, tarCXP, tarCDCH, weight, response) {
     cdchPesoCalculo: tarificacion.tarificacionCDCH.servicio.pesoCalculo,
     cdchValorServicio: tarificacion.tarificacionCDCH.servicio.valorServicio
   });
+
+  console.log(quote);
 
   quote.save(function (err, res) {
     if (!err) {
