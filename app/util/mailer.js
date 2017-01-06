@@ -9,16 +9,16 @@ module.exports = {
 function sendMailValidation(user, psw) {
 	// create reusable transporter object using the default SMTP transport
 	var transporter = nodemailer.createTransport('smtps://'+ config.mail.user +':'+ config.mail.pass +'@smtp.gmail.com');
-
+	
 	// setup e-mail data with unicode symbols
 	var html = '';
 	if (psw) {
 		html = 'Hola, bienvenido a Despachalo.com ' + '<br/>' +
-	    	  '<b> Valida tu registro en el siguiente enlace </b>' + config.mail.confirm + user.email + '<br/>' + 
+	    	  '<b> Valida tu registro en el siguiente enlace </b>' + config.mail.confirmprod + user.email + '<br/>' + 
 	    	  '<b> Se ha generado una contraseña aleatoria:  </b>' + psw; // html body
 	} else {
 		html = 'Hola, bienvenido a Despachalo.com ' + '<br/>' +
-	    	  '<b> Valida tu registro en el siguiente enlace </b>' + config.mail.confirm + user.email; // html body
+	    	  '<b> Valida tu registro en el siguiente enlace </b>' + config.mail.confirmprod + user.email; // html body
 	}
 	var mailOptions = {
 	    from: '"Despachalo.com " <'+ config.mail.user +'>', // sender address
