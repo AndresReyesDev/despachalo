@@ -8,7 +8,7 @@ var logger = require('express-logger');
 
 var config = require('./app/util/config');
 
-var dev = false;
+var dev = true;
 if(dev) {
 	// Database
 	host = config.development.database.host;
