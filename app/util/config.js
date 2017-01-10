@@ -89,7 +89,7 @@ module.exports = {
 
 	// Development Environment
 	development: {
-		port: '3000',
+		port: '8084',
 		database: {
 			host: '127.0.0.1',
 			name: 'despachalo-dev'
