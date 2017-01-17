@@ -27,7 +27,7 @@ module.exports = function(passport) {
 
         clientID        : configAuth.googleAuth.clientID,
         clientSecret    : configAuth.googleAuth.clientSecret,
-        callbackURL     : configAuth.googleAuth.callbackURL,
+        callbackURL     : configAuth.googleAuth.callbackURLPrd,
 
     },
     function(token, refreshToken, profile, done) {
@@ -78,7 +78,7 @@ module.exports = function(passport) {
 
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
-        callbackURL     : configAuth.facebookAuth.callbackURL,
+        callbackURL     : configAuth.facebookAuth.callbackURLPrd,
 
     },
     function(token, refreshToken, profile, done) {
