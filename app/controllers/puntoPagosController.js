@@ -23,7 +23,7 @@ module.exports = {
   * monto (String)
   **/
 
-function pay(req, res) {
+function pagar(req, res) {
 	// variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
   	var monto = req.param('monto');
 
