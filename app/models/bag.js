@@ -21,5 +21,17 @@ var getQuotes = function (typeBag, callback){
     });
 }
 
+var getPrice = function (typeBag, callback){
+    Token.findOne({name: typeBag}, function (err, token) {
+      if (!err && token) {
+        callback(null, token);
+      } else {
+        callback(err, null);
+        console.log("LOG: Token doesn't exist: " + err);
+      }
+    });
+}
+
 module.exports = mongoose.model('Bag', bag);
 module.exports.getQuotes = getQuotes;
+module.exports.getPrice = getPrice;

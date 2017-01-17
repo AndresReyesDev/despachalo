@@ -41,6 +41,11 @@ module.exports = {
 		rounds: 10
 	},
 
+	// boleta electronica
+	ticket: {
+		url: 'http://www.softnet.cl/sistems/contabilidad/integracionDTE/integra/webservices.php?wsdl'
+	},
+
 	// Servicios
 	services: {
 		chilexpress: {
@@ -78,8 +83,8 @@ module.exports = {
 		user: 'manuelvargasmejia@gmail.com',
 		pass: 'davidvargas+08',
 		admin: 'mvargas@formax.cl',
-		confirm: 'http://localhost:3000/desp/v1/users/validate/email?email=',
-		confirmprod: 'http://ec2-54-174-254-97.compute-1.amazonaws.com:8084/desp/v1/users/validate/email?email='
+		confirm: 'http://localhost:8084/desp/v1/users/validate/email?email=',
+		confirmprod: 'http://ec2-52-14-58-68.us-east-2.compute.amazonaws.com:8084/desp/v1/users/validate/email?email='
 	},
 
 	// SendGrid API Key
