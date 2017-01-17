@@ -20,9 +20,9 @@
 var request   = require('request');
 var crypto    = require('crypto');
 
-var config = require('../../../api/helpers/config/config.js');
+var config = require('../../../api/helpers/config/config.js'); // despachalo.com
 
-//var DEBUG = (process.env.NODE_ENV == 'debug');
+// var DEBUG = (process.env.NODE_ENV == 'debug'); despachalo.com
 var DEBUG = true;
 console.log("PUNTOPAGOS in", DEBUG ? "DEBUG" : "PRODUCTION", "mode");
 
@@ -43,8 +43,8 @@ if (!DEBUG) {
   PUNTOPAGOS_SECRET  = "replace_with_production_secret";
 } else if (DEBUG) {
   PUNTOPAGOS_URL     = "https://sandbox.puntopagos.com/";
-  PUNTOPAGOS_KEY     = config.puntoPagos.test.key;
-  PUNTOPAGOS_SECRET  = config.puntoPagos.test.secret;
+  PUNTOPAGOS_KEY     = config.puntoPagos.test.key; // despachalo.com
+  PUNTOPAGOS_SECRET  = config.puntoPagos.test.secret; // despachalo.com
 }
 
 var lineEnding = '\n';
@@ -159,7 +159,7 @@ exports.pay = function (trx_id, amount, paymentMethod, redirect) {
 };
 
 exports.generateId = function() {
-  return (idv6() + genDate()).replace(/[^0-9]/g,'').substr(0,15);
+  return (idv6() + genDate()).replace(/[^0-9]/g,'').substr(0,15); // despachalo.com
 };
   
 exports.validate = function(token, nid, price, callback) {
@@ -216,7 +216,7 @@ exports.validate = function(token, nid, price, callback) {
         cb_data = "Compra OK";
         break;
       default:
-        cb_err = "Codigo pago erroneo";
+        cb_err = "Codigo pago erroneo"; // despachalo.com
         break;
     }
     
