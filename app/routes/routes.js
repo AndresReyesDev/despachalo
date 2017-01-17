@@ -8,6 +8,10 @@ module.exports = function (app, passport) {
 	var RatesController = require('../controllers/ratesController');
 	var RatesIntController = require('../controllers/ratesIntController');
 
+	var PuntoPagosController = require('../controllers/puntoPagosController');
+
+	var TicketController = require('../controllers/ticketController');
+
 	var GeoCommuneController = require('../controllers/geoCommuneController');
 	var GeoCountryController = require('../controllers/geoCountryController');
 	var GeoProvinceController = require('../controllers/geoProvinceController');
@@ -66,6 +70,15 @@ module.exports = function (app, passport) {
 	// Rates Int
 	app.get('/desp/v1/rates/international', RatesIntController.getRatesInt);
 	app.post('/desp/v1/rates/international', RatesIntController.ratesInt);
+
+	// Punto Pagos
+	app.get('/desp/v1/puntopagos/pagar', PuntoPagosController.pagar);
+	app.post('/desp/v1/puntopagos/notificacion', PuntoPagosController.notificacion);
+	app.get('/desp/v1/puntopagos/validar', PuntoPagosController.validar);
+
+	// Boleta Electronica
+	//app.post('/desp/v1/ticket/invoice', TicketController.processDteInvoice);
+	//app.post('/desp/v1/ticket/ballot', TicketController.processDteBallot);
 
 	// Georeference
 	app.get('/desp/v1/geo/communes', GeoCommuneController.geoCommunes);

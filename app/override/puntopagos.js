@@ -20,7 +20,7 @@
 var request   = require('request');
 var crypto    = require('crypto');
 
-var config = require('../../../api/helpers/config/config.js'); // despachalo.com
+var config = require('../../../app/util/config.js'); // despachalo.com
 
 // var DEBUG = (process.env.NODE_ENV == 'debug'); despachalo.com
 var DEBUG = true;

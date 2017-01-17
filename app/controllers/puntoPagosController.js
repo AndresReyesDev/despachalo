@@ -13,9 +13,9 @@ var puntoPagos = require('puntopagos-node');
  **/
 
 module.exports = {
-  puntoPagosPagar: puntoPagosPagar,
-  puntoPagosNotificacion: puntoPagosNotificacion,
-  puntoPagosValidar: puntoPagosValidar
+  pagar: pagar,
+  notificacion: notificacion,
+  validar: validar
 };
 
 /**
@@ -23,7 +23,7 @@ module.exports = {
   * monto (String)
   **/
 
-function puntoPagosPagar(req, res) {
+function pay(req, res) {
 	// variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
   	var monto = req.param('monto');
 
@@ -53,7 +53,7 @@ function puntoPagosPagar(req, res) {
   * generatedId (String)
   **/
   
-function puntoPagosNotificacion(req, res) {
+function notificacion(req, res) {
 	// Validate payament
 
 	var data = req.body;
@@ -69,7 +69,7 @@ function puntoPagosNotificacion(req, res) {
   * generatedId (String)
   **/
 
-function puntoPagosValidar(req, res) {
+function validar(req, res) {
 	// Validate payament
 	puntoPagos.validate(token, generatedId, monto, function callback(err, data) {
 		if (!err) {
