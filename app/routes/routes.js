@@ -10,7 +10,7 @@ module.exports = function (app, passport) {
 
 	var PuntoPagosController = require('../controllers/puntoPagosController');
 
-	var TicketController = require('../controllers/ticketController');
+	//var TicketController = require('../controllers/ticketController');
 
 	var GeoCommuneController = require('../controllers/geoCommuneController');
 	var GeoCountryController = require('../controllers/geoCountryController');
