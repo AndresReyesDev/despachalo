@@ -12,7 +12,7 @@ module.exports = {
         'clientID'      : '599947091875-0fcg5jbhr30aan1aivkhp9lhcthoqop9.apps.googleusercontent.com',
         'clientSecret'  : 'g2O-Ke17LRKwU9NRFWZ387Qy',
         'callbackURL'   : 'http://localhost:3000/desp/v1/auth/google/callback',
-        'callbackURLPrd': 'http://ec2-52-14-58-68.us-east-2.compute.amazonaws.com:8084/desp/v1/auth/facebook/callback'
+        'callbackURLPrd': 'http://ec2-52-14-58-68.us-east-2.compute.amazonaws.com:8084/desp/v1/auth/google/callback'
     }
 
 };
