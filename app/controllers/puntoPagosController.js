@@ -1,6 +1,8 @@
 'use strict';
 var puntoPagos = require('puntopagos-node');
 
+var Notification = require('../models/notification');
+
 /** 
  * Modificar variables de configuración en Modulo PuntoPagos.
  * PUNTOPAGOS_KEY
@@ -57,11 +59,50 @@ function notificacion(req, res) {
 	// Validate payament
 
 	var data = req.body;
-	var head = {
-		fecha: req.headers.fecha,
-		autorizacion: req.headers.autorizacion
-	}
-	res.send(data);
+	
+	var head_fecha = req.headers.fecha;
+	var head_autorizacion = req.headers.autorizacion;
+
+	var token = body.token || '';
+	var trx_id = body.trx_id || '';
+	var medio_pago = body.medio_pago || '';
+	var monto = body.monto || '';
+	var fecha_operacion = body.fecha_operacion || '';
+	var numero_tarjeta = body.numero_tarjeta || '';
+	var num_cuotas = body.num_cuotas || '';
+	var tipo_cuotas = body.tipo_cuotas || '';
+	var valor_cuota = body.valor_cuota || '';
+	var primer_vencimiento = body.primer_vencimiento || '';
+	var numero_operacion = body.numero_operacion || '';
+	var codigo_autorizacion = body.codigo_autorizacion || '';
+
+	var notification = new Notification ({
+		head_fecha: head_fecha,
+	    head_autorizacion: head_autorizacion,
+	    token: token,
+	    trx_id: trx_id,
+		medio_pago: medio_pago,
+		monto: monto,
+		fecha_operacion: fecha_operacion,
+		numero_tarjeta: numero_tarjeta,
+		num_cuotas: num_cuotas,
+		tipo_cuotas: tipo_cuotas,
+		valor_cuota: valor_cuota,
+		primer_vencimiento: primer_vencimiento,
+		numero_operacion: numero_operacion,
+		codigo_autorizacion: codigo_autorizacion
+	});
+	  
+	notification.save(function (err, resp) {
+	    if (!err) {
+	      res.send(resp);
+	      console.log('LOG: Notification PuntoPagos successfully regiter');
+	    } else {
+	      res.status(500).send({ code: 500, desc: err});
+	      console.log('ERROR: ' + err);
+	    }
+	});
+
 }
 
 /**
