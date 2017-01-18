@@ -8,7 +8,7 @@ var User = require('../app/models/user');
 // load the auth variables
 var configAuth = require('./auth');
 
-module.exports = function(passport) {
+module.exports = function(passport, dev) {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
@@ -22,12 +22,15 @@ module.exports = function(passport) {
         });
     });
 
+    if (dev) googleCallbackURL = configAuth.googleAuth.callbackURL
+    else googleCallbackURL = configAuth.googleAuth.callbackURLPrd
+
     // GOOGLE Strategy
     passport.use(new GoogleStrategy({
 
         clientID        : configAuth.googleAuth.clientID,
         clientSecret    : configAuth.googleAuth.clientSecret,
-        callbackURL     : configAuth.googleAuth.callbackURLPrd,
+        callbackURL     : googleCallbackURL,
 
     },
     function(token, refreshToken, profile, done) {
@@ -73,12 +76,15 @@ module.exports = function(passport) {
 
     }));
 
+    if (dev) facebookCallbackURL = configAuth.facebookAuth.callbackURL
+    else facebookCallbackURL = configAuth.facebookAuth.callbackURLPrd
+
     // FACEBOOK Strategy
     passport.use(new FacebookStrategy({
 
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
-        callbackURL     : configAuth.facebookAuth.callbackURLPrd,
+        callbackURL     : facebookCallbackURL,
 
     },
     function(token, refreshToken, profile, done) {

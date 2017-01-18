@@ -45,7 +45,7 @@ app.use(express.session({ secret: 'SECRET' }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./config/passport')(passport);
+require('./config/passport')(passport, dev);
 require('./app/routes/routes')(app, passport);
 
 app.get('/', function(req, res) {
