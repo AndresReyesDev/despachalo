@@ -212,11 +212,12 @@ exports.validate = function(token, nid, price, callback) {
 
     switch (data.respuesta) {
       case '00':
+        cb_data = data; // despachalo
       case '01':
-        cb_data = "Compra OK";
+        cb_data = data; // despachalo
         break;
       default:
-        cb_err = "Codigo pago erroneo"; // despachalo.com
+        cb_err = "Codigo pago erroneo"; // despachalo
         break;
     }
     

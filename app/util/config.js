@@ -84,7 +84,7 @@ module.exports = {
 		pass: 'davidvargas+08',
 		admin: 'mvargas@formax.cl',
 		confirm: 'http://localhost:8084/desp/v1/users/validate/email?email=',
-		confirmprod: 'http://ec2-52-14-58-68.us-east-2.compute.amazonaws.com:8084/desp/v1/users/validate/email?email='
+		confirmprod: 'http://www.despachalo.com:8084/desp/v1/users/validate/email?email='
 	},
 
 	// SendGrid API Key

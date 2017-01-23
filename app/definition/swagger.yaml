@@ -979,9 +979,9 @@ paths:
     post:
       tags:
         - PuntoPago
-      description: Punto Pagos notifica que se efectuó el pago
+      description: Punto Pagos notifica que se efectuó el pago (Producción)
       # used as the method name of the controller
-      operationId: puntoPagosNotificacion
+      operationId: postNotificacion
       parameters:
         - name: fecha
           in: header
@@ -1009,17 +1009,16 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /puntopagos/validar/:
     get:
       tags:
         - PuntoPago
-      description: Recibe monto a recaudar por PuntoPagos
+      description: Punto Pagos notifica que se efectuó el pago (SandBox)
       # used as the method name of the controller
-      operationId: puntoPagosValidar
+      operationId: getNotificacion
       parameters:
-        - name: idGenerado
+        - name: token
           in: query
-          description: Id de transacción generado por Punto Pagos
+          description: Token de transacción
           required: true
           type: string
       responses:
@@ -1461,20 +1460,10 @@ definitions:
         type: number
   Notificacion:
     type: object
-    required:
-      - token
-      - trx_id
-      - medio_pago
-      - monto
-      - fecha_aprovacion
-      - numero_tarjeta
-      - num_cuotas
-      - tipo_cuotas
-      - valor_cuota
-      - primer_vencimiento
-      - numero_operacion
-      - codigo_autorizacion
     properties:
+      respuesta:
+        type: string
+        description: Respuesta
       token:
         type: string
         description: Token
@@ -1484,12 +1473,18 @@ definitions:
       medio_pago:
         type: string
         description: Medio de pago
+      medio_pago_descripcion:
+        type: string
+        description: Medio de pago descripcion
       monto:
         type: string
         description: Monto
-      fecha_aprovacion:
+      fecha_operacion:
         type: string
-        description: Fecha de aprovación
+        description: Fecha Operacion
+      fecha_aprobacion:
+        type: string
+        description: Fecha de aprobación
       numero_tarjeta:
         type: string
         description: Número de tarjeta

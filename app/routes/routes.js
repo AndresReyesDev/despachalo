@@ -73,8 +73,8 @@ module.exports = function (app, passport) {
 
 	// Punto Pagos
 	app.get('/desp/v1/puntopagos/pagar', PuntoPagosController.pagar);
-	app.post('/desp/v1/puntopagos/notificacion', PuntoPagosController.notificacion);
-	app.get('/desp/v1/puntopagos/validar', PuntoPagosController.validar);
+	app.get('/desp/v1/puntopagos/notificacion', PuntoPagosController.getNotificacion); // SandBox
+	app.post('/desp/v1/puntopagos/notificacion', PuntoPagosController.postNotificacion); // Producción
 
 	// Boleta Electronica
 	//app.post('/desp/v1/ticket/invoice', TicketController.processDteInvoice);
