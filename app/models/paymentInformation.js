@@ -7,7 +7,8 @@ var paymentInformation = new Schema({
 	redirect: String,
 	email: String,
 	monto: String,
-	bagToken: String
+	bagTokenName: String,
+	bagTokenQuote: String
 });
 
 module.exports = mongoose.model('PaymentInformation', paymentInformation);

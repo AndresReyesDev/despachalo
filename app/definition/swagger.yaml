@@ -952,18 +952,18 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   /puntopagos/pagar/:
-    get:
+    post:
       tags:
         - PuntoPago
       description: Recibe monto a recaudar por PuntoPagos
       # used as the method name of the controller
       operationId: puntoPagosPagar
       parameters:
-        - name: monto
-          in: query
-          description: Monto a recaudar
+        - name: data
+          in: body
           required: true
-          type: string
+          schema:
+            $ref: "#/definitions/Pagar"
       responses:
         "200":
           description: Success
@@ -1506,6 +1506,18 @@ definitions:
       codigo_autorizacion:
         type: string
         description: Código de autorización
+  Pagar:
+    type: object
+    properties:
+      email:
+        type: string
+        description: Email de usuario
+      monto:
+        type: string
+        description: Monto
+      type:
+        type: string
+        description: Tipo de bolsa
   DespachaloResponse:
     type: string
   ErrorResponse:

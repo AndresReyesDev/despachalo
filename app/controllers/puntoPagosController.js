@@ -4,6 +4,9 @@ var puntoPagos = require('puntopagos-node');
 var User = require('../models/user');
 var Bag = require('../models/bag');
 
+var jwt    = require('jsonwebtoken');
+var config = require('../util/config');
+
 var Notification = require('../models/notification');
 var PaymentInformation = require('../models/paymentInformation');
 
@@ -61,7 +64,8 @@ function pagar(req, res) {
 											redirect : data.redirect,
 											email : email,
 											monto : monto,
-											bagToken: bagToken
+											bagTokenName: bagToken.name,
+											bagTokenQuote: bagToken.numQuote
 										});
 
 										paymentInformation.save(function (err, resp) {
@@ -84,7 +88,7 @@ function pagar(req, res) {
 	            				console.log("LOG: Inconsistent bag price");
 							}
 						} else {
-							res.status(500).send({ code: 500, desc: err});
+							res.status(404).send({ code: 404, desc: "Token doesn't exist"});
 			      			console.log('ERROR: ' + err);
 						}
 					});
