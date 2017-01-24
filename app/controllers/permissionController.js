@@ -32,7 +32,7 @@ function findPermission (req, res) {
 							console.log('LOG: No permissions for type (' + typeUser + ')');
 						}
 					} else {
-						res.status(500).send({ code: 500, desc: err.message});
+						res.status(500).send({ code: 500, desc: err});
                         console.log('ERROR: ' + err);
 					}
 		  		});
@@ -46,7 +46,7 @@ function findPermission (req, res) {
 							console.log("LOG: permissions doesn't exist");
 						}
 					} else {
-						res.status(500).send({ code: 500, desc: err.message});
+						res.status(500).send({ code: 500, desc: err});
                         console.log('ERROR: ' + err);
 					}
 		  		});
@@ -90,7 +90,7 @@ function addPermission (req, res) {
 							res.send(response);
 							console.log('LOG: Permission successfully regiter');
 						} else {
-							res.status(500).send({ code: 500, desc: err.message});
+							res.status(500).send({ code: 500, desc: err});
                         	console.log('ERROR: ' + err);
 						}
 					});
@@ -145,7 +145,7 @@ function updatePermission (req, res) {
 												res.send(response);
 												console.log('Permission successfully updated');
 											} else {
-												res.status(500).send({ code: 500, desc: err.message});
+												res.status(500).send({ code: 500, desc: err});
                 								console.log('ERROR: ' + err);
 											}
 										});
@@ -192,7 +192,7 @@ function deletePermission (req, res) {
 		                    res.status(200).send({ code: 200, desc: 'Permission successfully deleted'});
 		                    console.log('LOG: Permission successfully deleted');
 		                  } else {
-		                    res.status(500).send({ code: 500, desc: err.message});
+		                    res.status(500).send({ code: 500, desc: err});
                 			console.log('ERROR: ' + err);
 		                  }
 		                });

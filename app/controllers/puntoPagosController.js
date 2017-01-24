@@ -1,6 +1,9 @@
 'use strict';
 var puntoPagos = require('puntopagos-node');
 
+var User = require('../models/user');
+var Bag = require('../models/bag');
+
 var Notification = require('../models/notification');
 var PaymentInformation = require('../models/paymentInformation');
 
@@ -22,37 +25,81 @@ module.exports = {
 };
 
 function pagar(req, res) {
-	// variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
-  	var monto = req.param('monto');
 
-	// Config current deployment mode.
-	puntoPagos.config('PUNTOPAGOS_KEY', 'PUNTOPAGOS_SECRET');
+	var body = req.body;
 
-	// Create payment
-	var generatedId = puntoPagos.generateId();
-	puntoPagos.pay(generatedId, monto, puntoPagos.paymentMethod.ripley, function callback(err, data){
-		if (!err) {
-			var paymentInformation = new PaymentInformation ({
-				generatedId : generatedId,
-				token : data.token,
-				monto : monto,
-				redirect : data.redirect
-			});
+	var email = body.email;
+	var type = body.type;
+	var monto = body.monto;
 
-			paymentInformation.save(function (err, resp) {
-			    if (!err) {
-			      res.send(resp);
-			      console.log('LOG: Payment Information PuntoPagos successfully regiter');
-			    } else {
-			      res.status(500).send({ code: 500, desc: err});
-			      console.log('ERROR: ' + err);
-			    }
-			});
-		} else {
-			console.log(err);
-			res.send('Error Method Pay :: ' + err);
-		}
-	});
+  	var token = req.headers.authorization;
+  	// verifies secret and checks exp
+    jwt.verify(token, config.jwt.secret, function (err, decoded) {
+        if (err) {
+          res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+          console.log('INFO: Fallo en la autenticación de Token: ' + err);
+        } else {
+            // if everything is good, save to request for use in other routes
+            req.decoded = decoded;
+            if (email) {
+		        User.findOne({email:email}, function (err, user) {
+		          if (user) {
+	                Bag.getToken(type, function (err, bagToken) {
+						if (!err && bagToken) {
+							if (bagToken.rate == monto) {
+
+								// Config current deployment mode.
+								puntoPagos.config('PUNTOPAGOS_KEY', 'PUNTOPAGOS_SECRET');
+
+								// Create payment
+								var generatedId = puntoPagos.generateId();
+								puntoPagos.pay(generatedId, monto, puntoPagos.paymentMethod.ripley, function callback(err, data){
+									if (!err) {
+										var paymentInformation = new PaymentInformation ({
+											generatedId : generatedId,
+											token : data.token,
+											redirect : data.redirect,
+											email : email,
+											monto : monto,
+											bagToken: bagToken
+										});
+
+										paymentInformation.save(function (err, resp) {
+										    if (!err) {
+										      res.send(resp);
+										      console.log('LOG: Payment Information PuntoPagos successfully regiter');
+										    } else {
+										      res.status(500).send({ code: 500, desc: err});
+										      console.log('ERROR: ' + err);
+										    }
+										});
+									} else {
+										console.log(err);
+										res.send('Error Method Pay :: ' + err);
+									}
+								});
+
+							} else {
+								res.status(404).send({ code: 404, desc: "Inconsistent bag price."});
+	            				console.log("LOG: Inconsistent bag price");
+							}
+						} else {
+							res.status(500).send({ code: 500, desc: err});
+			      			console.log('ERROR: ' + err);
+						}
+					});
+		          } else {
+		            res.status(404).send({ code: 404, desc: "User doesn't exist"});
+		            console.log("LOG: User doesn't exist");
+		          }
+		        });
+        	} else {
+        		res.status(400).send({ code: 400, desc: 'User email is required'});
+				console.log('LOG: User email is required');
+        	}
+        }
+    });
+
 }
 
 function getNotificacion(req, res) {

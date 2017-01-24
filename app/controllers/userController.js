@@ -87,7 +87,7 @@ function findUsers (req, res) {
 						console.log("LOG: Users doesn't exist");
 					}
 				} else {
-					res.status(500).send({ code: 500, desc: err.message});
+					res.status(500).send({ code: 500, desc: err});
 					console.log('ERROR: ' + err);
 				}
 	  		});
@@ -118,7 +118,7 @@ function findUserByEmail (req, res) {
 							console.log("LOG: User doesn't exist");
 						}
 					} else {
-						res.status(500).send({ code: 500, desc: err.message});
+						res.status(500).send({ code: 500, desc: err});
 						console.log('ERROR: ' + err);
 					}
 				});
@@ -174,7 +174,7 @@ function findTypeUser (req, res) {
 							console.log("LOG: User doesn't exist");
 						}
 					} else {
-						res.status(500).send({ code: 500, desc: err.message});
+						res.status(500).send({ code: 500, desc: err});
 						console.log('ERROR: ' + err);
 					}
 		  		});
@@ -230,7 +230,7 @@ function addUser (req, res) {
 								console.log("LOG: User does exist");
 							}
 						} else {
-							res.status(500).send({ code: 500, desc: err.message});
+							res.status(500).send({ code: 500, desc: err});
 							console.log('ERROR: ' + err);
 						}
 					});
@@ -435,7 +435,7 @@ function userValidateEmail (req, res) {
 						res.send(user);
 						console.log('User validated successfully');
 					} else {
-						res.status(500).send({ code: 500, desc: err.message});
+						res.status(500).send({ code: 500, desc: err});
 						console.log('ERROR: ' + err);
 					}
 				});
@@ -473,7 +473,7 @@ function deleteUser (req, res) {
 								res.send(user);
 								console.log('Usuario deshabilitado exitosamente');
 							} else {
-								res.status(500).send({ code: 500, desc: err.message});
+								res.status(500).send({ code: 500, desc: err});
 								console.log('ERROR: ' + err);
 							}
 						});

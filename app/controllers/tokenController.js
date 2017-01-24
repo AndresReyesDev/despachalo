@@ -38,7 +38,7 @@ function findToken (req, res) {
             console.log('LOG: User must be Administrator');
           }
         } else {
-          res.status(500).send({ code: 500, desc: err.message});
+          res.status(500).send({ code: 500, desc: err});
           console.log('ERROR: ' + err);
         }
       });
@@ -73,7 +73,7 @@ function addToken (req, res) {
                       res.send(token);
                       console.log('LOG: Token successfully regiter');
                     } else {
-                      res.status(500).send({ code: 500, desc: err.message});
+                      res.status(500).send({ code: 500, desc: err});
                       console.log('ERROR: ' + err);
                     }
                   }); 
@@ -119,7 +119,7 @@ function updateToken(req, res) {
                             res.send(token);
                             console.log('LOG: Token successfully updated');
                           } else {
-                            res.status(500).send({ code: 500, desc: err.message});
+                            res.status(500).send({ code: 500, desc: err});
                             console.log('ERROR: ' + err);
                           }
                         });

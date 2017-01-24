@@ -188,7 +188,7 @@ function getRates (req, res) {
                 console.log("LOG: User doesn't exist");
               }
             } else {
-              res.status(500).send({ code: 500, desc: err.message});
+              res.status(500).send({ code: 500, desc: err});
               console.log('ERROR: ' + err);
             }
           });

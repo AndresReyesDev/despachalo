@@ -21,7 +21,7 @@ var getQuotes = function (typeBag, callback){
     });
 }
 
-var getPrice = function (typeBag, callback){
+var getToken = function (typeBag, callback){
     Token.findOne({name: typeBag}, function (err, token) {
       if (!err && token) {
         callback(null, token);
@@ -34,4 +34,4 @@ var getPrice = function (typeBag, callback){
 
 module.exports = mongoose.model('Bag', bag);
 module.exports.getQuotes = getQuotes;
-module.exports.getPrice = getPrice;
+module.exports.getToken = getToken;

@@ -103,7 +103,7 @@ function addBag (req, res) {
                       saveBag(user, type, 0, res);
                     }
                   } else {
-                    res.status(500).send({ code: 500, desc: err.message});
+                    res.status(500).send({ code: 500, desc: err});
                     console.log('ERROR: ' + err);
                   }
                 }).sort('-purchased');

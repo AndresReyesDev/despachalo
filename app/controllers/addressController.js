@@ -143,7 +143,7 @@ function addAddress (req, res) {
 												res.send(response);
 												console.log('Address successfully created');
 											} else {
-												res.status(500).send({ code: 500, desc: err.message});
+												res.status(500).send({ code: 500, desc: err});
 												console.log('ERROR: ' + err);
 											}
 										});
@@ -222,7 +222,7 @@ function updateAddress (req, res) {
 													res.send(response);
 													console.log('Address successfully updated');
 												} else {
-													res.status(500).send({ code: 500, desc: err.message});
+													res.status(500).send({ code: 500, desc: err});
 													console.log('ERROR: ' + err);
 												}
 											});
@@ -272,7 +272,7 @@ function deleteAddress (req, res) {
 				                    res.send({ code: 200, desc: 'Address deleted'});
 				                    console.log('LOG: Address successfully deleted');
 				                  } else {
-				                    if(err) res.status(500).send({ code: 500, desc: err.message});
+				                    if(err) res.status(500).send({ code: 500, desc: err});
 				                    console.log('ERROR: ' + err);
 				                  }
 				                });
