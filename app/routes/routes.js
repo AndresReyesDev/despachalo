@@ -72,7 +72,7 @@ module.exports = function (app, passport) {
 	app.post('/desp/v1/rates/international', RatesIntController.ratesInt);
 
 	// Punto Pagos
-	app.get('/desp/v1/puntopagos/pagar', PuntoPagosController.pagar);
+	app.post('/desp/v1/puntopagos/pagar', PuntoPagosController.pagar);
 	app.get('/desp/v1/puntopagos/notificacion', PuntoPagosController.getNotificacion); // SandBox
 	app.post('/desp/v1/puntopagos/notificacion', PuntoPagosController.postNotificacion); // Producción
 
