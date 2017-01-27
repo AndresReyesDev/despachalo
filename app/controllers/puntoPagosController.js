@@ -1,6 +1,8 @@
 'use strict';
 var puntoPagos = require('puntopagos-node');
 
+var BagController = require('./bagController');
+
 var User = require('../models/user');
 var Bag = require('../models/bag');
 
@@ -47,51 +49,57 @@ function pagar(req, res) {
             if (email) {
 		        User.findOne({email:email}, function (err, user) {
 		          if (user) {
-	                Bag.getToken(type, function (err, bagToken) {
-						if (!err && bagToken) {
-							if (bagToken.rate == monto) {
+		          	if (user.status) {
+		          		Bag.getToken(type, function (err, bagToken) {
+							if (!err && bagToken) {
+								if (bagToken.rate == monto) {
 
-								// Config current deployment mode.
-								puntoPagos.config('PUNTOPAGOS_KEY', 'PUNTOPAGOS_SECRET');
+									// Config current deployment mode.
+									puntoPagos.config('PUNTOPAGOS_KEY', 'PUNTOPAGOS_SECRET');
 
-								// Create payment
-								var generatedId = puntoPagos.generateId();
-								puntoPagos.pay(generatedId, monto, puntoPagos.paymentMethod.ripley, function callback(err, data){
-									if (!err) {
-										var paymentInformation = new PaymentInformation ({
-											generatedId : generatedId,
-											token : data.token,
-											redirect : data.redirect,
-											email : email,
-											monto : monto,
-											bagTokenName: bagToken.name,
-											bagTokenQuote: bagToken.numQuote
-										});
+									// Create payment
+									var generatedId = puntoPagos.generateId();
+									puntoPagos.pay(generatedId, monto, puntoPagos.paymentMethod.ripley, function callback(err, data){
+										if (!err) {
+											var paymentInformation = new PaymentInformation ({
+												generatedId : generatedId,
+												token : data.token,
+												redirect : data.redirect,
+												email : email,
+												monto : monto,
+												bagTokenName: bagToken.name,
+												bagTokenQuote: bagToken.numQuote,
+												date: new Date
+											});
 
-										paymentInformation.save(function (err, resp) {
-										    if (!err) {
-										      res.send(resp);
-										      console.log('LOG: Payment Information PuntoPagos successfully regiter');
-										    } else {
-										      res.status(500).send({ code: 500, desc: err});
-										      console.log('ERROR: ' + err);
-										    }
-										});
-									} else {
-										console.log(err);
-										res.send('Error Method Pay :: ' + err);
-									}
-								});
+											paymentInformation.save(function (err, resp) {
+											    if (!err) {
+											      res.send(resp);
+											      console.log('LOG: Payment Information PuntoPagos successfully regiter');
+											    } else {
+											      res.status(500).send({ code: 500, desc: err});
+											      console.log('ERROR: ' + err);
+											    }
+											});
+										} else {
+											console.log(err);
+											res.send('Error Method Pay :: ' + err);
+										}
+									});
 
+								} else {
+									res.status(404).send({ code: 404, desc: "Inconsistent bag price."});
+		            				console.log("LOG: Inconsistent bag price");
+								}
 							} else {
-								res.status(404).send({ code: 404, desc: "Inconsistent bag price."});
-	            				console.log("LOG: Inconsistent bag price");
+								res.status(404).send({ code: 404, desc: "Token doesn't exist"});
+				      			console.log('ERROR: ' + err);
 							}
-						} else {
-							res.status(404).send({ code: 404, desc: "Token doesn't exist"});
-			      			console.log('ERROR: ' + err);
-						}
-					});
+						});
+		          	} else {
+		          		res.status(202).send({ code: 202, desc: 'User not validated'});
+                  		console.log('LOG: User not validated');
+		          	}
 		          } else {
 		            res.status(404).send({ code: 404, desc: "User doesn't exist"});
 		            console.log("LOG: User doesn't exist");
@@ -188,6 +196,11 @@ function saveNotification (data, callback) {
 	  
 	notification.save(function (err, resp) {
 	    if (!err) {
+	    	PaymentInformation.findOne({token:token}, function (err, pInformation) {
+              if (!err && pInformation) {
+              	BagController.addBagMethod(pInformation.email, pInformation.bagTokenName);
+              }
+          	});
 	      console.log('LOG: Notification PuntoPagos successfully regiter');
 	    } else {
 	      console.log('ERROR: ' + err);

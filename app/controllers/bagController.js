@@ -7,7 +7,8 @@ var config = require('../util/config');
 module.exports = {
   findBag: findBag,
   findBags: findBags,
-  addBag: addBag
+  addBag: addBag,
+  addBagMethod: addBagMethod
 };
 
 function findBag (req, res) {
@@ -84,41 +85,45 @@ function addBag (req, res) {
       } else {
         // if everything is good, save to request for use in other routes
         req.decoded = decoded;
-          User.findOne({email:email}, function (err, user) {
-            if (!err && user) {
-              if (user.status) {
-                Bag.findOne({email:email}, function (err, userBag) {
-                  if (!err) {
-                    if (userBag) {
-                      if (userBag.type == type) {
-                        // Acumular numCotizaciones si se compra una nueva bolsa del mismo tipo
-                        var remaining = parseInt(userBag.numQuote) - parseInt(user.quotes);
-                        saveBag(user, type, remaining, res);
+        addBagMethod(email, type, res);
+      }
+  });
+}
+
+function addBagMethod (email, type, res) {
+            User.findOne({email:email}, function (err, user) {
+              if (!err && user) {
+                if (user.status) {
+                  Bag.findOne({email:email}, function (err, userBag) {
+                    if (!err) {
+                      if (userBag) {
+                        if (userBag.type == type) {
+                          // Acumular numCotizaciones si se compra una nueva bolsa del mismo tipo
+                          var remaining = parseInt(userBag.numQuote) - parseInt(user.quotes);
+                          saveBag(user, type, remaining, res);
+                        } else {
+                          // Crear nueva bolsa de otro tipo y resetear cotizaciones de usuario
+                          saveBag(user, type, 0, res);
+                        }
                       } else {
                         // Crear nueva bolsa de otro tipo y resetear cotizaciones de usuario
                         saveBag(user, type, 0, res);
                       }
                     } else {
-                      // Crear nueva bolsa de otro tipo y resetear cotizaciones de usuario
-                      saveBag(user, type, 0, res);
+                      res.status(500).send({ code: 500, desc: err});
+                      console.log('ERROR: ' + err);
                     }
-                  } else {
-                    res.status(500).send({ code: 500, desc: err});
-                    console.log('ERROR: ' + err);
-                  }
-                }).sort('-purchased');
+                  }).sort('-purchased');
+                } else {
+                  res.status(202).send({ code: 202, desc: 'User not validated'});
+                  console.log('LOG: User not validated');
+                }
               } else {
-                res.status(202).send({ code: 202, desc: 'User not validated'});
-                console.log('LOG: User not validated');
+                res.status(404).send({ code: 404, desc: "User doesn't exist"});
+                console.log("LOG: User doesn't exist");
               }
-            } else {
-              res.status(404).send({ code: 404, desc: "User doesn't exist"});
-              console.log("LOG: User doesn't exist");
-            }
-        });
-      }
-  });
-}
+          });
+        };
 
 function saveBag (user, type, remaining, res) {
   Bag.getQuotes(type, function (err, numQuote) {

@@ -8,7 +8,8 @@ var paymentInformation = new Schema({
 	email: String,
 	monto: String,
 	bagTokenName: String,
-	bagTokenQuote: String
+	bagTokenQuote: String,
+	purchased: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('PaymentInformation', paymentInformation);
