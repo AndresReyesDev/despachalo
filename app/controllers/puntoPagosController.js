@@ -199,6 +199,8 @@ function saveNotification (data, callback) {
 	    	PaymentInformation.findOne({token:token}, function (err, pInformation) {
               if (!err && pInformation) {
               	BagController.addBagMethod(pInformation.email, pInformation.bagTokenName);
+              } else {
+          		console.log('ERROR: Bag not associated, PaymentInformation not found');
               }
           	});
 	      console.log('LOG: Notification PuntoPagos successfully regiter');

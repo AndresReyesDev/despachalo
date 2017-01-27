@@ -62,7 +62,7 @@ function geoRegions (req, res) {
 				if (!err && allRegions.length != 0) {
 					res.send(allRegions);
 				} else {
-					res.status(404).send({ code: 404, desc: "Communes doesn't exist"});
+					res.status(404).send({ code: 404, desc: "Regions doesn't exist"});
 					console.log('ERROR: ' + err);
 				}
 			}).sort('-_id');
