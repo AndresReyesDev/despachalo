@@ -3,6 +3,8 @@ var User = require('../models/user');
 var Address = require('../models/address');
 var jwt    = require('jsonwebtoken');
 var config = require('../util/config');
+var Georeference = require('../util/georeference');
+var parseString = require('xml2js').parseString;
 
 module.exports = {
   findAllAddresses: findAllAddresses,
@@ -90,7 +92,7 @@ function addAddress (req, res) {
 	var body = req.body;
   	var email = body.email;
   	var alias = body.alias;
-  	var nameCalle = body.nameCalle;
+  	var nameStreet = body.nameStreet;
   	var number = body.number;
   	var department = body.department;
   	var city = body.city;
@@ -123,7 +125,7 @@ function addAddress (req, res) {
 										var address = new Address ({
 											email: email,
 											alias: alias,
-											nameCalle: nameCalle,
+											nameStreet: nameStreet,
 										  	number: number,
 										  	department: department,
 										  	city: city,
@@ -137,14 +139,21 @@ function addAddress (req, res) {
 										  	checkDelivery: checkDelivery,
 										  	checkRetirement: checkRetirement
 										});
-										
-										address.save(function (err, response) {
-											if (!err) {
-												res.send(response);
-												console.log('Address successfully created');
+
+										validateAddressCXP(address, function (validate){
+											if (validate == 0) {
+												address.save(function (err, response) {
+													if (!err) {
+														res.send(response);
+														console.log('Address successfully created');
+													} else {
+														res.status(500).send({ code: 500, desc: err});
+														console.log('ERROR: ' + err);
+													}
+												});
 											} else {
-												res.status(500).send({ code: 500, desc: err});
-												console.log('ERROR: ' + err);
+												res.status(400).send({ code: 400, descripcion: "Address not available"});
+												console.log('LOG: address not available');
 											}
 										});
 									} else {
@@ -173,7 +182,7 @@ function updateAddress (req, res) {
   	var body = req.body;
   	var email = body.email;
   	var alias = body.alias;
-  	var nameCalle = body.nameCalle || '';
+  	var nameStreet = body.nameStreet || '';
   	var number = body.number || '';
   	var department = body.department || '';
   	var city = body.city || '';
@@ -203,7 +212,7 @@ function updateAddress (req, res) {
 									if (!err) {
 										if (dir) {
 																					
-											if (nameCalle != '') dir.nameCalle = nameCalle;
+											if (nameStreet != '') dir.nameStreet = nameStreet;
 										  	if (number != '') dir.number = number;
 										  	if (department != '') dir.department = department;
 										  	if (city != '') dir.city = city;
@@ -216,14 +225,21 @@ function updateAddress (req, res) {
 										  	if (observations != '') dir.observations = observations;
 										  	if (checkDelivery != '') dir.checkDelivery = checkDelivery;
 										  	if (checkRetirement != '') dir.checkRetirement = checkRetirement;
-											
-											dir.save(function (err, response) {
-												if (!err) {
-													res.send(response);
-													console.log('Address successfully updated');
+
+										  	validateAddressCXP(dir, function (validate){
+												if (validate == 0) {
+													dir.save(function (err, response) {
+														if (!err) {
+															res.send(response);
+															console.log('Address successfully updated');
+														} else {
+															res.status(500).send({ code: 500, desc: err});
+															console.log('ERROR: ' + err);
+														}
+													});
 												} else {
-													res.status(500).send({ code: 500, desc: err});
-													console.log('ERROR: ' + err);
+													res.status(400).send({ code: 400, descripcion: "Address not available"});
+													console.log('LOG: address not available');
 												}
 											});
 										} else {
@@ -292,4 +308,19 @@ function deleteAddress (req, res) {
 				  });
 		    }
 		});
+}
+
+function validateAddressCXP (address, callback) {
+
+	Georeference.validateCXP(address, function (chunck) {
+		console.log(chunck);
+		parseString(chunck, function (err, result) {
+			if (!err) {
+				callback(result.direccion.codEstado[0]);
+			} else {
+				console.log(err);
+			}
+		});
+	});
+
 }

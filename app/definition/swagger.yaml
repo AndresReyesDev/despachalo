@@ -1249,7 +1249,7 @@ definitions:
     required:
       - email
       - alias
-      - nameCalle
+      - nameStreet
       - number
       - department
       - city
@@ -1265,7 +1265,7 @@ definitions:
       alias:
         description: Nombre de la dirección
         type: string
-      nameCalle:
+      nameStreet:
         description: Correo del usuario
         type: string
       number:

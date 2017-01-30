@@ -52,7 +52,8 @@ module.exports = {
 			// REST
 			georeferencia: {
 				regiones: 'http://ws.ssichilexpress.cl/api/v1/georeferencia/regiones',
-				comunas: 'http://ws.ssichilexpress.cl/api/v1/georeferencia/coberturas'
+				comunas: 'http://ws.ssichilexpress.cl/api/v1/georeferencia/coberturas',
+				direcciones: 'http://ws.ssichilexpress.cl/api/v1/georeferencia/direcciones'
 			},
 			// REST
 			tarificar: 'http://ws.ssichilexpress.cl/api/v1/couriers?'

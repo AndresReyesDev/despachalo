@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var address = new Schema({
 	email: String,
 	alias: String,
-	nameCalle: String,
+	nameStreet: String,
 	number: String,
 	department: String,
 	city: String,
