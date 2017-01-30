@@ -312,15 +312,19 @@ function deleteAddress (req, res) {
 
 function validateAddressCXP (address, callback) {
 
-	Georeference.validateCXP(address, function (chunck) {
-		console.log(chunck);
-		parseString(chunck, function (err, result) {
-			if (!err) {
-				callback(result.direccion.codEstado[0]);
-			} else {
-				console.log(err);
-			}
+	if (address.country != 'CL') {
+		callback(0);
+	} else {
+		Georeference.validateCXP(address, function (chunck) {
+			console.log(chunck);
+			parseString(chunck, function (err, result) {
+				if (!err) {
+					callback(result.direccion.codEstado[0]);
+				} else {
+					console.log(err);
+					callback(-1);
+				}
+			});
 		});
-	});
-
+	}
 }
