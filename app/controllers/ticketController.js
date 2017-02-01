@@ -206,7 +206,8 @@ function processDteBallotMethod (email, transactionId, res) {
 											}
 										}
 									}
-									var xml = js2xmlparser.parse("DTE", DTE).split("\n").join("").trim().replace(/\\/, "");
+									var xml_ = js2xmlparser.parse("DTE", DTE).split("\n").join("").trim();
+									var xml = xml_.replace(/\\/, 'h');
 
 									var ballot = new Ballot ({
 										encabezado: {
