@@ -8,19 +8,19 @@ module.exports = {
 };
 
 // Empresa - Factura
-function processDteFactura (rut, xmlBasico, folio, callback) {
+function processDteFactura (xmlBasico, folio, callback) {
 	var url_ticket = config.ticket.url;
 
   var args = { 
-    rut: rut,
-    clave: '',
+    rut: config.ticket.rut,
+    clave: config.ticket.clave,
     xml2: xmlBasico,
-    ambiente: '0',
+    ambiente: config.ticket.ambiente,
     asignafolio: folio,
     adicionales: ''
   };
 
-  soap.createClient(url_cdc, function(err, client) {
+  soap.createClient(url_ticket, function(err, client) {
     client.procesadte(args, function(err, result) {
       if (!err) {
         callback(result);
@@ -33,14 +33,14 @@ function processDteFactura (rut, xmlBasico, folio, callback) {
 }
 
 // Cliente - Boleta
-function processDteBoleta (rut, xmlBasico, folio, callback) {
+function processDteBoleta (xmlBasico, folio, callback) {
   var url_ticket = config.ticket.url;
 
   var args = { 
-    rut: rut,
-    clave: '',
+    rut: config.ticket.rut,
+    clave: config.ticket.clave,
     xml2: xmlBasico,
-    ambiente: '0',
+    ambiente: config.ticket.ambiente,
     asignafolio: folio,
     adicionales: ''
   };

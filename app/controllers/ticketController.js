@@ -45,7 +45,7 @@ function processDteInvoice (req, res) {
 												var invoice = new Invoice ({
 													encabezado: {
 														idDoc: {
-															tipoDte: '33',
+															tipoDte: config.ticket.tipoDteFactura,
 															folio: '', // Numero de comprobante de pago (Puntopagos)
 															fchemis: date,
 															fchvenc: date
@@ -169,7 +169,7 @@ function processDteBallotMethod (email, transactionId, res) {
 									var date = dd+'-'+mm+'-'+yyyy;
 
 									var folio = transactionId+'';
-									var tipoDte = '39';
+									var tipoDte = config.ticket.tipoDteBoleta;
 									// Process DTE Ticket - Boleta
 									var DTE = {
 										"@": {
@@ -182,7 +182,7 @@ function processDteBallotMethod (email, transactionId, res) {
 											"Encabezado": {
 												"idDoc": {
 													"tipoDte": tipoDte,
-													"folio": folio, // Numero de comprobante de pago (Puntopagos)
+													"folio": folio, // Id transacción de pago (Puntopagos)
 													"fchemis": date,
 													"indServicio": '3'
 												},
@@ -212,7 +212,7 @@ function processDteBallotMethod (email, transactionId, res) {
 										encabezado: {
 											idDoc: {
 												tipoDte: tipoDte,
-												folio: folio, // Numero de comprobante de pago (Puntopagos)
+												folio: folio, // Id transacción de pago (Puntopagos)
 												fchemis: date,
 												indServicio: '3'
 											},
@@ -228,7 +228,7 @@ function processDteBallotMethod (email, transactionId, res) {
 											}
 										},
 										detalle: {
-											nroLinDet: '1', // Id de Bolsa
+											nroLinDet: '1',
 											nmbItem: bag.type, // Nombre de bolsa
 											qtyItem: '1',
 											prcItem: token.rate, // Precio de Token
@@ -241,7 +241,7 @@ function processDteBallotMethod (email, transactionId, res) {
 										if (!err) {
 											res.send(ball);
 											// SOAP - Servicio boleta electronica
-											//TicketService.processDteBoleta(user.rut, xml, folio);
+											//TicketService.processDteBoleta(xml, folio);
 										} else {
 											res.status(500).send({ code: 500, desc: err});
 											console.log('ERROR: ' + err);

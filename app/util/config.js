@@ -43,7 +43,12 @@ module.exports = {
 
 	// boleta electronica
 	ticket: {
-		url: 'http://www.softnet.cl/sistems/contabilidad/integracionDTE/integra/webservices.php?wsdl'
+		url: 'http://www.softnet.cl/sistems/contabilidad/integracionDTE/integra/webservices.php?wsdl',
+		rut: '76360761-5',
+		clave: 'Cw4WTtqm',
+		ambiente: '0',
+		tipoDteFactura: '33',
+		tipoDteBoleta: '39'
 	},
 
 	// Servicios
