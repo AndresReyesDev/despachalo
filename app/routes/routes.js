@@ -10,7 +10,7 @@ module.exports = function (app, passport) {
 
 	var PuntoPagosController = require('../controllers/puntoPagosController');
 
-	//var TicketController = require('../controllers/ticketController');
+	var TicketController = require('../controllers/ticketController');
 
 	var GeoCommuneController = require('../controllers/geoCommuneController');
 	var GeoCountryController = require('../controllers/geoCountryController');
@@ -76,9 +76,9 @@ module.exports = function (app, passport) {
 	app.get('/desp/v1/puntopagos/notificacion', PuntoPagosController.getNotificacion); // SandBox
 	app.post('/desp/v1/puntopagos/notificacion', PuntoPagosController.postNotificacion); // Producción
 
-	// Boleta Electronica
+	// Boleta - Factura Electronica
 	//app.post('/desp/v1/ticket/invoice', TicketController.processDteInvoice);
-	//app.post('/desp/v1/ticket/ballot', TicketController.processDteBallot);
+	app.post('/desp/v1/ticket/ballot', TicketController.processDteBallot);
 
 	// Georeference
 	app.get('/desp/v1/geo/communes', GeoCommuneController.geoCommunes);

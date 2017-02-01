@@ -2,6 +2,7 @@
 var puntoPagos = require('puntopagos-node');
 
 var BagController = require('./bagController');
+var TicketController = require('./ticketController');
 
 var User = require('../models/user');
 var Bag = require('../models/bag');
@@ -199,7 +200,9 @@ function saveNotification (data, callback) {
 	    	PaymentInformation.findOne({token:token}, function (err, pInformation) {
               if (!err && pInformation) {
               	BagController.addBagMethod(pInformation.email, pInformation.bagTokenName);
+              	TicketController.processDteBallotMethod(pInformation.email, pInformation.generatedId);
               } else {
+              	console.log('ERROR: Ballor not generate, PaymentInformation not found');
           		console.log('ERROR: Bag not associated, PaymentInformation not found');
               }
           	});
