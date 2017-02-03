@@ -14,7 +14,7 @@ function processDteFactura (xmlBasico, folio, callback) {
   var args = { 
     rut: config.ticket.rut,
     clave: config.ticket.clave,
-    xml2: xmlBasico,
+    xml2: '<![CDATA['+xmlBasico+']]>',
     ambiente: config.ticket.ambiente,
     asignafolio: folio,
     adicionales: ''
@@ -39,7 +39,7 @@ function processDteBoleta (xmlBasico, folio, callback) {
   var args = { 
     rut: config.ticket.rut,
     clave: config.ticket.clave,
-    xml2: xmlBasico,
+    xml2: '<![CDATA['+xmlBasico+']]>',
     ambiente: config.ticket.ambiente,
     asignafolio: folio,
     adicionales: ''

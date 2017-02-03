@@ -168,23 +168,23 @@ function processDteBallotMethod (email, transactionId, res) {
 									if(mm<10) mm='0'+mm;
 									var date = dd+'-'+mm+'-'+yyyy;
 
-									var folio = transactionId+'';
+									var folio = transactionId+"";
 									var tipoDte = config.ticket.tipoDteBoleta;
 									// Process DTE Ticket - Boleta
 									var DTE = {
 										"@": {
-											"version": '1.0'
+											"version": "1.0"
 										},
 										"Documento": {
 											'@': {
-												"ID": 'F'+folio+'T'+tipoDte
+												"ID": "F"+folio+"T"+tipoDte
 											},
 											"Encabezado": {
 												"idDoc": {
 													"tipoDte": tipoDte,
 													"folio": folio, // Id transacción de pago (Puntopagos)
 													"fchemis": date,
-													"indServicio": '3'
+													"indServicio": config.ticket.indServicio
 												},
 												"emisor": {
 													"rutEmisor": user.rut

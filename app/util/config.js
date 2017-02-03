@@ -48,7 +48,8 @@ module.exports = {
 		clave: 'Cw4WTtqm',
 		ambiente: '0',
 		tipoDteFactura: '33',
-		tipoDteBoleta: '39'
+		tipoDteBoleta: '39',
+		indServicio: '3'
 	},
 
 	// Servicios
