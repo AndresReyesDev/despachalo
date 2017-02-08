@@ -25,6 +25,8 @@ tags:
     description: Servicios de Tarificación
   - name: PuntoPago
     description: Servicios de PuntoPago
+  - name: BoletaElectronica
+    description: Servicios de Boleta Electronica
 # 
 schemes:
   # tip: remove http to make production-grade
@@ -1032,6 +1034,92 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /ticket/ballot/:
+    post:
+      tags:
+        - BoletaElectronica
+      description: Generar la boleta electronica
+      # used as the method name of the controller
+      operationId: processDteBallot
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ElectronicBallot"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      tags:
+        - BoletaElectronica
+      description: Obtener boleta electronica por Id de Trasacción
+      # used as the method name of the controller
+      operationId: getDteBallot
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: transactionId
+          in: query
+          description: Id de transacción
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /ticket/ballotPDF/:
+    get:
+      tags:
+        - BoletaElectronica
+      description: Obtener boleta electronica PDF por Id de Trasacción
+      # used as the method name of the controller
+      operationId: getDteBallotPDF
+      parameters:
+        - name: authorization
+          in: header
+          description: Json Web Token
+          required: true
+          type: string
+        - name: transactionId
+          in: query
+          description: Id de transacción
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DespachaloResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /geo/regions:
     get:
       tags:
@@ -1518,6 +1606,15 @@ definitions:
       type:
         type: string
         description: Tipo de bolsa
+  ElectronicBallot:
+    type: object
+    properties:
+      email:
+        type: string
+        description: Email de usuario
+      transactionId:
+        type: number
+        description: Id de Transacción de Punto Pagos
   DespachaloResponse:
     type: string
   ErrorResponse:
