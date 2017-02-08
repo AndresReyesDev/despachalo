@@ -49,7 +49,9 @@ module.exports = {
 		ambiente: '0',
 		tipoDteFactura: '33',
 		tipoDteBoleta: '39',
-		indServicio: '3'
+		indServicio: '3',
+		asignafolio: '1',
+		cedible: '1'
 	},
 
 	// Servicios

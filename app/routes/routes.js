@@ -79,6 +79,8 @@ module.exports = function (app, passport) {
 	// Boleta - Factura Electronica
 	//app.post('/desp/v1/ticket/invoice', TicketController.processDteInvoice);
 	app.post('/desp/v1/ticket/ballot', TicketController.processDteBallot);
+	app.get('/desp/v1/ticket/ballot', TicketController.getDteBallot);
+	app.get('/desp/v1/ticket/ballotPDF', TicketController.getDteBallotPDF);
 
 	// Georeference
 	app.get('/desp/v1/geo/communes', GeoCommuneController.geoCommunes);

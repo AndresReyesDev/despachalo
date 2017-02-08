@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var electronicBallot = new Schema({
+	email: String,
+	transactionId: String,
 	encabezado: {
 		idDoc: {
 			tipoDte: String,
@@ -27,7 +29,8 @@ var electronicBallot = new Schema({
 		prcItem: String,
 		montoItem: String
 	},
-	xml: String
+	xml: String,
+	xmlAdicionales: String
 });
 
 module.exports = mongoose.model('ElectronicBallot', electronicBallot);
