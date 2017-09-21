@@ -214,6 +214,7 @@ function addUser (req, res) {
 								var rut = body.rut;
 								var type = body.type;
 								var phone = body.phone;
+								var mobile = body.mobile;
 
 								var user = new User ({
 									email: email,
@@ -223,6 +224,7 @@ function addUser (req, res) {
 									rut: rut,
 									type: type,
 									phone: phone
+									mobile: mobile
 								});
 								save(user, res);
 								// Send mail de validación de correo
@@ -318,6 +320,7 @@ function updateUser (req, res) {
   var rut = body.rut || '';
   var type = body.type || '';
   var phone = body.phone || '';
+  var mobile = body.mobile || '';
 
 	var token = req.headers.authorization;
 	// verifies secret and checks exp
@@ -335,6 +338,7 @@ function updateUser (req, res) {
 					if (rut != '') user.rut = rut;
 					if (type != '') user.type = type;
 					if (phone != '') user.phone = phone;
+					if (mobile != '') user.mobile = mobile;
 					if (password != '') {
 						encrypt.cryptPassword(password, function (err, hash) { 
 							if (!err && hash) {
@@ -373,6 +377,7 @@ function userRegister (req, res) {
 					lastname: body.lastname,
 					type: body.type,
 					phone: body.phone,
+					mobile: body.mobile,
 					token: token
 				});
 				
