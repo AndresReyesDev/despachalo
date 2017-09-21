@@ -5,6 +5,7 @@ var user = new Schema({
 	email: String,
 	name: String,
 	lastname: String,
+	phone: String,
 	type: String,
 	password: String,
 	rut: String,

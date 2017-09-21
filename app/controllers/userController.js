@@ -213,6 +213,7 @@ function addUser (req, res) {
 								var lastname = body.lastname;
 								var rut = body.rut;
 								var type = body.type;
+								var phone = body.phone;
 
 								var user = new User ({
 									email: email,
@@ -220,7 +221,8 @@ function addUser (req, res) {
 									lastname: lastname,
 									password: password,
 									rut: rut,
-									type: type
+									type: type,
+									phone: phone
 								});
 								save(user, res);
 								// Send mail de validación de correo
@@ -315,6 +317,7 @@ function updateUser (req, res) {
   var password = body.password || '';
   var rut = body.rut || '';
   var type = body.type || '';
+  var phone = body.phone || '';
 
 	var token = req.headers.authorization;
 	// verifies secret and checks exp
@@ -331,6 +334,7 @@ function updateUser (req, res) {
 					if (lastname != '') user.lastname = lastname;
 					if (rut != '') user.rut = rut;
 					if (type != '') user.type = type;
+					if (phone != '') user.phone = phone;
 					if (password != '') {
 						encrypt.cryptPassword(password, function (err, hash) { 
 							if (!err && hash) {
@@ -360,16 +364,15 @@ function userRegister (req, res) {
     User.findOne({email:email}, function (err, user) {
 		if (!err) {
 			if (!user) {
-				
 				var token = jwt.sign({email: email}, config.jwt.secret, {
 		          expiresIn: '1d' // expires in 24 hours
 		        });
-
 				var user = new User ({
 					email: email,
 					name: body.name,
 					lastname: body.lastname,
 					type: body.type,
+					phone: body.phone,
 					token: token
 				});
 				
