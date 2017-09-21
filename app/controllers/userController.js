@@ -223,7 +223,7 @@ function addUser (req, res) {
 									password: password,
 									rut: rut,
 									type: type,
-									phone: phone
+									phone: phone,
 									mobile: mobile
 								});
 								save(user, res);
