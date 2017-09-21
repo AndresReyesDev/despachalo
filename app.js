@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var logger = require('express-logger');
-
+var cors = require('cors');
 var config = require('./app/util/config');
 
 var dev = false;
@@ -37,7 +37,7 @@ mongoose.connect(mongodbUri, function(err, res) {
 });
 
 app.use(logger({path:'./app/logs/despachalo-logs.txt'}));
-
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.session({ secret: 'SECRET' }));
