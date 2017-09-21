@@ -7,6 +7,7 @@ var User = require('../app/models/user');
 
 // load the auth variables
 var configAuth = require('./auth');
+var config = require('../app/util/config');
 
 module.exports = function(passport, dev) {
 
@@ -63,6 +64,7 @@ module.exports = function(passport, dev) {
                     newUser.provider = profile.provider; // for local user
                     newUser.status = true; // for local user
                     newUser.type = 3; // for local user
+                    newUser.quotes = config.bag.type.visitor;
 
                     // save the user
                     newUser.save(function(err) {
@@ -110,14 +112,15 @@ module.exports = function(passport, dev) {
                     var name = profile.displayName.split(" ");
                     newUser.facebook.name = profile.name.givenName || name[0];
                     newUser.facebook.lastname = profile.name.familyName || name[1];
-                    newUser.facebook.email = '';
+                    newUser.facebook.email = profile.emails[0].value;
 
-                    newUser.email = ''; // for local user
+                    newUser.email = profile.emails[0].value; // for local user
                     newUser.name = profile.name.givenName || name[0];
                     newUser.lastname = profile.name.familyName || name[1];
                     newUser.provider = profile.provider; // for local user
                     newUser.status = true; // for local user
                     newUser.type = 3; // for local user
+                    newUser.quotes = config.bag.type.visitor;
 
                     // save the user
                     newUser.save(function(err) {
