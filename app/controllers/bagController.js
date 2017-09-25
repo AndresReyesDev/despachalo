@@ -31,7 +31,7 @@ function findBag (req, res) {
                     bag: bag,
                     user: user
                   }
-                  res.send(resp);
+                  res.status(200).send({code: 200,desc: "Bag for  " + email,content: {resp}});
                 } else {
                   res.status(404).send({ code: 404, desc: 'No bag bought'});
                   console.log('LOG: No bag bought');
@@ -58,9 +58,9 @@ function findBags (req, res) {
       } else {
         // if everything is good, save to request for use in other routes
         req.decoded = decoded;
-        Bag.find({email:email}, function (err, bolsa) {
-          if (!err && bolsa.length != 0) {
-            res.send(bolsa);
+        Bag.find({email:email}, function (err, bags) {
+          if (!err && bags.length != 0) {
+            res.status(200).send({code: 200,desc: "Bags for  " + email,content: {bags}});
           } else {
             res.status(404).send({ code: 404, desc: 'No bags bought'});
             console.log('LOG: No bags bought');
@@ -137,8 +137,8 @@ function saveBag (user, type, remaining, res) {
 
       bag.save(function (err, response){
         if (!err) {
-          res.send(bag);
-          console.log('Bolsa prepago comprada exitosamente');
+          res.status(200).send({code: 200,desc: "Bag prepaid successfully created " + user.email,content: {bag}});
+          console.log('Bag prepaid successfully created');
         } else {
           res.status(500).send({ code: 501, desc: err.message});
           console.log('ERROR: ' + err);

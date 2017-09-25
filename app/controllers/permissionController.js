@@ -26,7 +26,7 @@ function findPermission (req, res) {
 				Permission.findOne({typeUser:typeUser}, function (err, permission) {
 		  			if (!err) {
 						if (permission) {
-						    res.send(permission);
+						    res.status(200).send({code: 200,desc: "Permissions for Type User " + typeUser,content: {permission}});
 						} else {
 							res.status(404).send({ code: 404, descripcion: 'No permissions for type (' + typeUser + ')'});
 							console.log('LOG: No permissions for type (' + typeUser + ')');
@@ -87,7 +87,7 @@ function addPermission (req, res) {
 					
 					permission.save(function (err, response) {
 						if (!err) {
-							res.send(response);
+							res.status(200).send({code: 200,desc: "Permission successfully regiter for type user " + typeUser,content: {response}});
 							console.log('LOG: Permission successfully regiter');
 						} else {
 							res.status(500).send({ code: 500, desc: err});
@@ -142,7 +142,7 @@ function updatePermission (req, res) {
 										
 										permission.save(function (err, response) {
 											if (!err) {
-												res.send(response);
+												res.status(200).send({code: 200,desc: "Permission successfully updated for type user " + typeUser,content: {response}});
 												console.log('Permission successfully updated');
 											} else {
 												res.status(500).send({ code: 500, desc: err});

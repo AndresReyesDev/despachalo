@@ -11,26 +11,26 @@ var Mailer = require('../util/mailer.js');
 var config = require('../util/config');
 
 module.exports = {
-  userLogin: userLogin,
-  findUsers: findUsers,
-  findUserByEmail: findUserByEmail,
-  findTypesUser: findTypesUser,
-  findTypeUser: findTypeUser,
-  addUser: addUser,
-  userResetPassword: userResetPassword,
-  updateUser: updateUser,
-  userRegister: userRegister,
-  userValidateEmail: userValidateEmail,
-  deleteUser: deleteUser
+	userLogin: userLogin,
+	findUsers: findUsers,
+	findUserByEmail: findUserByEmail,
+	findTypesUser: findTypesUser,
+	findTypeUser: findTypeUser,
+	addUser: addUser,
+	userResetPassword: userResetPassword,
+	updateUser: updateUser,
+	userRegister: userRegister,
+	userValidateEmail: userValidateEmail,
+	deleteUser: deleteUser
 };
 
 function userLogin (req, res) {
 
-  var body = req.body;
-  var email = body.email;
-  var password = body.password;
+	var body = req.body;
+	var email = body.email;
+	var password = body.password;
 
-  User.findOne({email:email}, function (err, user) {
+	User.findOne({email:email}, function (err, user) {
 		if (!err && user) {
 			if (user.password != null) {
 				encrypt.comparePassword(password, user.password, function (err, isPasswordMatch) {
@@ -41,13 +41,13 @@ function userLogin (req, res) {
 						}
 						var token = jwt.sign(u, config.jwt.secret, {
 				          expiresIn: '1d' // expires in 24 hours
-				        });
+				      });
 						user.token = token;
 						user.save(function (err, response) {
 							if (!err) {
-								res.send(user);
+								res.status(200).send({code: 200,desc: "User logged in successfully " + email,content: {response}});
 							} else {
-								res.status(500).send({ code: 500, descripcion: 'Token not save'});
+								res.status(500).send({ code: 500, descripcion: 'User not logged'});
 								console.log('ERROR: ' + err);
 							}
 						});
@@ -69,29 +69,29 @@ function userLogin (req, res) {
 
 function findUsers (req, res) {
 
-  	var token = req.headers.authorization;
+	var token = req.headers.authorization;
 	// verifies secret and checks exp
 	jwt.verify(token, config.jwt.secret, function(err, decoded) {
-	    if (err) {
-	      res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
-	      console.log('INFO: Fallo en la autenticación de Token: ' + err);
-	    } else {
+		if (err) {
+			res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+			console.log('INFO: Fallo en la autenticación de Token: ' + err);
+		} else {
 	      // if everything is good, save to request for use in other routes
 	      req.decoded = decoded;
-	  		User.find({}, function (err, users) {
-	  			if (!err) {
-					if (users.length > 0) {
-					    res.send(users); 
-					} else {
-						res.status(404).send({ code: 404, desc: "Users doesn't exist"});
-						console.log("LOG: Users doesn't exist");
-					}
-				} else {
-					res.status(500).send({ code: 500, desc: err});
-					console.log('ERROR: ' + err);
-				}
-	  		});
-	    }
+	      User.find({}, function (err, users) {
+	      	if (!err) {
+	      		if (users.length > 0) {
+	      			res.status(200).send({code: 200,desc: "Users found successfully" ,content: {users}}); 
+	      		} else {
+	      			res.status(404).send({ code: 404, desc: "Users doesn't exist"});
+	      			console.log("LOG: Users doesn't exist");
+	      		}
+	      	} else {
+	      		res.status(500).send({ code: 500, desc: err});
+	      		console.log('ERROR: ' + err);
+	      	}
+	      });
+	  }
 	});
 }
 
@@ -102,87 +102,84 @@ function findUserByEmail (req, res) {
 	var token = req.headers.authorization;
     // verifies secret and checks exp
     jwt.verify(token, config.jwt.secret, function (err, decoded) {
-        if (err) {
-          res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
-          console.log('INFO: Fallo en la autenticación de Token: ' + err);
-        } else {
+    	if (err) {
+    		res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+    		console.log('INFO: Fallo en la autenticación de Token: ' + err);
+    	} else {
             // if everything is good, save to request for use in other routes
             req.decoded = decoded;
             if (email) {
-	        	User.findOne({email:email}, function (err, user) {
-					if (!err) {
-						if (user) {
-							res.send(user);
-						} else {
-							res.status(404).send({ code: 404, desc: "User doesn't exist"});
-							console.log("LOG: User doesn't exist");
-						}
-					} else {
-						res.status(500).send({ code: 500, desc: err});
-						console.log('ERROR: ' + err);
-					}
-				});
-        	} else {
-        		res.status(400).send({ code: 400, desc: 'User email is required'});
-				console.log('LOG: User email is required');
-        	}
+            	User.findOne({email:email}, function (err, user) {
+            		if (!err) {
+            			if (user) {
+            				res.status(200).send({code: 200,desc: "User found successfully " + email,content: {user}}); 
+            			}
+            		} else {
+            			res.status(500).send({ code: 500, desc: err});
+            			console.log('ERROR: ' + err);
+            		}
+            	});
+            } else {
+            	res.status(400).send({ code: 400, desc: 'User email is required'});
+            	console.log('LOG: User email is required');
+            }
         }
     });
 }
 
 function findTypesUser (req, res) {
-  	
+
 	var token = req.headers.authorization;
 	// verifies secret and checks exp
 	jwt.verify(token, config.jwt.secret, function(err, decoded) {
-	    if (err) {
-	      res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
-	      console.log('INFO: Fallo en la autenticación de Token: ' + err);
-	    } else {
+		if (err) {
+			res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+			console.log('INFO: Fallo en la autenticación de Token: ' + err);
+		} else {
 	      // if everything is good, save to request for use in other routes
 	      req.decoded = decoded;
-			var types = {
-				super: config.user.type.super,
-				admin: config.user.type.admin,
-				client: config.user.type.client
-			}
-		    res.send(types);
-		}
+	      var types = {
+	      	super: config.user.type.super,
+	      	admin: config.user.type.admin,
+	      	client: config.user.type.client
+	      }
+	      res.status(200).send({code: 200,desc: "User types found successfully",content: {types}}); 
+	  }
 	});
 }
 
 function findTypeUser (req, res) {
-  	
+
 	var body = req.body;
-  	var email = body.email;
+	var email = body.email;
 	var token = req.headers.authorization;
 	// verifies secret and checks exp
 	jwt.verify(token, config.jwt.secret, function(err, decoded) {
-	    if (err) {
-	      res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
-	      console.log('INFO: Fallo en la autenticación de Token: ' + err);
-	    } else {
+		if (err) {
+			res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+			console.log('INFO: Fallo en la autenticación de Token: ' + err);
+		} else {
 	      // if everything is good, save to request for use in other routes
 	      req.decoded = decoded;
-	        if (email) {
-		  		User.findOne({email:email}, function (err, user) {
-		  			if (!err) {
-						if (user) {
-						    res.send(user);
-						} else {
-							res.status(404).send({ code: 404, desc: "User doesn't exist"});
-							console.log("LOG: User doesn't exist");
-						}
-					} else {
-						res.status(500).send({ code: 500, desc: err});
-						console.log('ERROR: ' + err);
-					}
-		  		});
-		  	} else {
-				res.status(400).send({ code: 400, desc: 'User email is required'});
-				console.log('LOG: User email is required');
-		  	}
-	    }
+	      if (email) {
+	      	User.findOne({email:email}, function (err, user) {
+	      		if (!err) {
+	      			if (user) {
+	      				res.status(200).send({code: 200,desc: "User type found successfully " + email,content: {user}}); 
+	      			} else {
+	      				res.status(404).send({ code: 404, desc: "User doesn't exist"});
+	      				console.log("LOG: User doesn't exist");
+	      			}
+	      		} else {
+	      			res.status(500).send({ code: 500, desc: err});
+	      			console.log('ERROR: ' + err);
+	      		}
+	      	});
+	      } else {
+	      	res.status(400).send({ code: 400, desc: 'User email is required'});
+	      	console.log('LOG: User email is required');
+	      }
+	  }
 	});
 }
 
@@ -193,40 +190,40 @@ function addUser (req, res) {
 	var body = req.body;
 	var psw = generator.generate({length: 10,numbers: true});
 
-  	var token = req.headers.authorization;
+	var token = req.headers.authorization;
 	// verifies secret and checks exp
 	jwt.verify(token, config.jwt.secret, function(err, decoded) {
-	    if (err) {
-	      res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
-	      console.log('INFO: Fallo en la autenticación de Token: ' + err);
-	    } else {
+		if (err) {
+			res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+			console.log('INFO: Fallo en la autenticación de Token: ' + err);
+		} else {
 	      // if everything is good, save to request for use in other routes
 	      req.decoded = decoded;
 	      encrypt.cryptPassword(psw, function (err, hash) {
-				if (!err && hash) {
-					var password = 	hash;
-					var email = body.email;
-					User.findOne({email:email}, function (err, user) {
-						if (!err) {
-							if (!user) {
-								var name = body.name;
-								var lastname = body.lastname;
-								var rut = body.rut;
-								var type = body.type;
-								var phone = body.phone;
-								var mobile = body.mobile;
+	      	if (!err && hash) {
+	      		var password = 	hash;
+	      		var email = body.email;
+	      		User.findOne({email:email}, function (err, user) {
+	      			if (!err) {
+	      				if (!user) {
+	      					var name = body.name;
+	      					var lastname = body.lastname;
+	      					var rut = body.rut;
+	      					var type = body.type;
+	      					var phone = body.phone;
+	      					var mobile = body.mobile;
 
-								var user = new User ({
-									email: email,
-									name: name,
-									lastname: lastname,
-									password: password,
-									rut: rut,
-									type: type,
-									phone: phone,
-									mobile: mobile
-								});
-								save(user, res);
+	      					var user = new User ({
+	      						email: email,
+	      						name: name,
+	      						lastname: lastname,
+	      						password: password,
+	      						rut: rut,
+	      						type: type,
+	      						phone: phone,
+	      						mobile: mobile
+	      					});
+	      					save(user, res);
 								// Send mail de validación de correo
 								Mailer.sendMailValidation(user, psw);
 							} else {
@@ -238,19 +235,19 @@ function addUser (req, res) {
 							console.log('ERROR: ' + err);
 						}
 					});
-				} else {
-					res.status(500).send({ code: 501, descripcion: 'Error encrypt password'});
-					console.log('ERROR: ' + err);
-				}
-			});
-	    }
+	      	} else {
+	      		res.status(500).send({ code: 501, descripcion: 'Error encrypt password'});
+	      		console.log('ERROR: ' + err);
+	      	}
+	      });
+	  }
 	});
 }
 
 function save (user, res) {
 	user.save(function (err, response) {
 		if (!err) {
-			res.send(user);
+			res.status(200).send({code: 200,desc: "User saved successfully ",content: {response}}); 
 		} else {
 			res.status(500).send({ code: 501, desc: err.message});
 			console.log('ERROR: ' + err);
@@ -261,28 +258,28 @@ function save (user, res) {
 function userResetPassword (req, res) {
 	var admin = req.param('admin');
 	var email = req.param('email');
-  	var token = req.headers.authorization;
+	var token = req.headers.authorization;
 	// verifies secret and checks exp
 	jwt.verify(token, config.jwt.secret, function(err, decoded) {
-	    if (err) {
-	      res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
-	      console.log('INFO: Fallo en la autenticación de Token: ' + err);
-	    } else {
+		if (err) {
+			res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+			console.log('INFO: Fallo en la autenticación de Token: ' + err);
+		} else {
 	      // if everything is good, save to request for use in other routes
 	      req.decoded = decoded;
-	    	User.findOne({email:admin}, function (err, user) {
-				if (!err) {
-					Permission.findOne({typeUser:user.type}, function (err, per) {
-						if (per.resetPassword) {
-							User.findOne({email:email}, function (err, user) {
-								if (!err) {
-									if (user) {
-										var psw = generator.generate({length: 10,numbers: true});
-										encrypt.cryptPassword(psw, function (err, hash) {
-											if (!err && hash) {
-												var password = 	hash;
-												user.password = password;
-												save(user, res);
+	      User.findOne({email:admin}, function (err, user) {
+	      	if (!err) {
+	      		Permission.findOne({typeUser:user.type}, function (err, per) {
+	      			if (per.resetPassword) {
+	      				User.findOne({email:email}, function (err, user) {
+	      					if (!err) {
+	      						if (user) {
+	      							var psw = generator.generate({length: 10,numbers: true});
+	      							encrypt.cryptPassword(psw, function (err, hash) {
+	      								if (!err && hash) {
+	      									var password = 	hash;
+	      									user.password = password;
+	      									save(user, res);
 												// Send mail Reset Password
 												Mailer.sendMailResetPassword(user, psw);
 											} else {
@@ -290,87 +287,86 @@ function userResetPassword (req, res) {
 												console.log('ERROR: ' + err);
 											}
 										});
-									} else {
-										res.status(404).send({ code: 404, desc: "User does'n exist"});
-										console.log("LOG: User doesn't exist");
-									}
-								} else {
-									res.status(500).send({ code: 501, desc: err.message});
-									console.log('ERROR: ' + err);
-								}
-							});
-						} else {
-							res.status(401).send({ code: 402, desc: "User isn't authorized to perform this action."});
-							console.log("LOG: User isn't authorized to perform this action.");
-						}
-					});
-				}
-			});
-	    }
+	      						} else {
+	      							res.status(404).send({ code: 404, desc: "User does'n exist"});
+	      							console.log("LOG: User doesn't exist");
+	      						}
+	      					} else {
+	      						res.status(500).send({ code: 501, desc: err.message});
+	      						console.log('ERROR: ' + err);
+	      					}
+	      				});
+	      			} else {
+	      				res.status(401).send({ code: 402, desc: "User isn't authorized to perform this action."});
+	      				console.log("LOG: User isn't authorized to perform this action.");
+	      			}
+	      		});
+	      	}
+	      });
+	  }
 	});
 }
 
 function updateUser (req, res) {
-  
-  var body = req.body;
-  var email = body.email;
-  var name = body.name || '';
-  var lastname = body.lastname || '';
-  var password = body.password || '';
-  var rut = body.rut || '';
-  var type = body.type || '';
-  var phone = body.phone || '';
-  var mobile = body.mobile || '';
+
+	var body = req.body;
+	var email = body.email;
+	var name = body.name || '';
+	var lastname = body.lastname || '';
+	var password = body.password || '';
+	var rut = body.rut || '';
+	var type = body.type || '';
+	var phone = body.phone || '';
+	var mobile = body.mobile || '';
 
 	var token = req.headers.authorization;
 	// verifies secret and checks exp
 	jwt.verify(token, config.jwt.secret, function(err, decoded) {
-	    if (err) {
-	      res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
-	      console.log('INFO: Fallo en la autenticación de Token: ' + err);
-	    } else {
+		if (err) {
+			res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+			console.log('INFO: Fallo en la autenticación de Token: ' + err);
+		} else {
 	      // if everything is good, save to request for use in other routes
 	      req.decoded = decoded;
-	        User.findOne({email:email}, function (err, user) {
-				if (!err && user) {
-					if (name != '') user.name = name;
-					if (lastname != '') user.lastname = lastname;
-					if (rut != '') user.rut = rut;
-					if (type != '') user.type = type;
-					if (phone != '') user.phone = phone;
-					if (mobile != '') user.mobile = mobile;
-					if (password != '') {
-						encrypt.cryptPassword(password, function (err, hash) { 
-							if (!err && hash) {
-								user.password = hash;
-								save(user, res);
-							}
-						});
-					} else {
-						save(user, res);
-					}
-				} else {
-					res.status(404).send({ code: 404, desc: "User does'n exist"});
-					console.log("LOG: User doesn't exist");
-				}
-			});
-	    }
+	      User.findOne({email:email}, function (err, user) {
+	      	if (!err && user) {
+	      		if (name != '') user.name = name;
+	      		if (lastname != '') user.lastname = lastname;
+	      		if (rut != '') user.rut = rut;
+	      		if (type != '') user.type = type;
+	      		if (phone != '') user.phone = phone;
+	      		if (mobile != '') user.mobile = mobile;
+	      		if (password != '') {
+	      			encrypt.cryptPassword(password, function (err, hash) { 
+	      				if (!err && hash) {
+	      					user.password = hash;
+	      					save(user, res);
+	      				}
+	      			});
+	      		} else {
+	      			save(user, res);
+	      		}
+	      	} else {
+	      		res.status(404).send({ code: 404, desc: "User does'n exist"});
+	      		console.log("LOG: User doesn't exist");
+	      	}
+	      });
+	  }
 	});
 }
 
 // Registar usuario clientes
-
 function userRegister (req, res) {
 
-  	var body = req.body;
-  	var email = body.email;
+	var body = req.body;
+	var email = body.email;
 
-    User.findOne({email:email}, function (err, user) {
+	User.findOne({email:email}, function (err, user) {
 		if (!err) {
 			if (!user) {
 				var token = jwt.sign({email: email}, config.jwt.secret, {
 		          expiresIn: '1d' // expires in 24 hours
-		        });
+		      });
 				var user = new User ({
 					email: email,
 					name: body.name,
@@ -416,7 +412,7 @@ function saveBag (user, type, res) {
 
 			bag.save(function (err, response) {
 				if (!err) {
-					res.send(user);
+					res.status(200).send({code: 200,desc: "Bag successfully saved for " + user.email,content: {response}}); 
 					console.log('LOG: Visitor bag successfully assigned');
 				} else {
 					res.status(500).send({ code: 502, desc: err});
@@ -434,27 +430,27 @@ function userValidateEmail (req, res) {
 
 	var email = req.param('email');
 
-    User.findOne({email:email}, function (err, user) {
-	  	if (!err && user) {
-	  		if (!user.status){
-	  			user.status = true;
-	  			user.save(function (err, response) {
+	User.findOne({email:email}, function (err, user) {
+		if (!err && user) {
+			if (!user.status){
+				user.status = true;
+				user.save(function (err, response) {
 					if (!err) {
-						res.send(user);
+						res.status(200).send({code: 200,desc: "User validated successfully" + email,content: {response}}); 
 						console.log('User validated successfully');
 					} else {
 						res.status(500).send({ code: 500, desc: err});
 						console.log('ERROR: ' + err);
 					}
 				});
-	  		} else {
-	  			res.status(202).send({ code: 202, desc: 'User already validated'});
+			} else {
+				res.status(202).send({ code: 202, desc: 'User already validated'});
 				console.log('LOG: User already validated');
-	  		}
-	  	} else {
-	  		res.status(404).send({ code: 404, desc: "User doesn't exist"});
+			}
+		} else {
+			res.status(404).send({ code: 404, desc: "User doesn't exist"});
 			console.log("LOG: User doesn't exist");
-	  	}
+		}
 	});
 }
 
@@ -463,37 +459,37 @@ function deleteUser (req, res) {
   var body = req.body;
   var email = body.email;
 
-	var token = req.headers.authorization;
+  var token = req.headers.authorization;
 	// verifies secret and checks exp
 	jwt.verify(token, config.jwt.secret, function(err, decoded) {
-	    if (err) {
-	      res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
-	      console.log('INFO: Fallo en la autenticación de Token: ' + err);
-	    } else {
+		if (err) {
+			res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+			console.log('INFO: Fallo en la autenticación de Token: ' + err);
+		} else {
 	      // if everything is good, save to request for use in other routes
 	      req.decoded = decoded;
-	        User.findOne({email:email}, function (err, user) {
-			  	if (!err && user) {
-			  		if (user.status){
-			  			user.status = false;
-			  			user.save(function (err, response) {
-							if (!err) {
-								res.send(user);
-								console.log('Usuario deshabilitado exitosamente');
-							} else {
-								res.status(500).send({ code: 500, desc: err});
-								console.log('ERROR: ' + err);
-							}
-						});
-			  		} else {
-			  			res.status(202).send({ code: 202, desc: 'User already disabled'});
-						console.log('LOG: User already disabled');
-			  		}
-			  	} else {
-			  		res.status(404).send({ code: 404, desc: "User doesn't exist"});
-					console.log("LOG: User doesn't exist");
-			  	}
-			});
-	    }
+	      User.findOne({email:email}, function (err, user) {
+	      	if (!err && user) {
+	      		if (user.status){
+	      			user.status = false;
+	      			user.save(function (err, response) {
+	      				if (!err) {
+	      					res.status(200).send({code: 200,desc: "User delayed successfully " + email,content: {response}}); 
+	      					console.log('User delayed successfully');
+	      				} else {
+	      					res.status(500).send({ code: 500, desc: err});
+	      					console.log('ERROR: ' + err);
+	      				}
+	      			});
+	      		} else {
+	      			res.status(202).send({ code: 202, desc: 'User already disabled'});
+	      			console.log('LOG: User already disabled');
+	      		}
+	      	} else {
+	      		res.status(404).send({ code: 404, desc: "User doesn't exist"});
+	      		console.log("LOG: User doesn't exist");
+	      	}
+	      });
+	  }
 	});
 }

@@ -27,7 +27,7 @@ function findToken (req, res) {
           if (user && user.type == '1') {
             Token.find({}, function (err, token) {
               if (!err && token) {
-                res.send(token);
+                res.status(200).send({code: 200,desc: "Find token successfully " + typeUser,content: {token}});
               } else {
                 res.status(404).send({ code: 404, descripcion: 'Tokens not found'});
                 console.log('LOG: Tokens not found ' + err);
@@ -70,7 +70,7 @@ function addToken (req, res) {
                   
                   token.save(function (err, response) {
                     if (!err) {
-                      res.send(token);
+                      res.status(200).send({code: 200,desc: "Token added successfully " + email,content: {response}});
                       console.log('LOG: Token successfully regiter');
                     } else {
                       res.status(500).send({ code: 500, desc: err});
@@ -116,7 +116,7 @@ function updateToken(req, res) {
                       
                         token.save(function (err, response) {
                           if (!err) {
-                            res.send(token);
+                            res.status(200).send({code: 200,desc: "Token updated successfully " + email,content: {response}});
                             console.log('LOG: Token successfully updated');
                           } else {
                             res.status(500).send({ code: 500, desc: err});

@@ -29,7 +29,7 @@ function findAllAddresses (req, res) {
 					Address.find({email:email}, function (err, addresses) {
 						if (!err) {
 							if (addresses) {
-								res.send(addresses);
+								res.status(200).send({code: 200,desc: "Addresses for " + email,content: {addresses}});
 							} else {
 								res.status(404).send({ code: 404, desc: "Addresses doesn't exist"});
 								console.log("ERROR: Addresses doesn't exist");
@@ -65,7 +65,7 @@ function findAddress (req, res) {
 							Address.findOne({email:email, alias:alias}, function (err, dir) {
 								if (!err) {
 									if (dir) {
-										res.send(dir);
+										res.status(200).send({code: 200,desc: "Address for " + email,content: {dir}});
 									} else {
 										res.status(404).send({ code: 404, desc: "Address doesn't exist"});
 										console.log("ERROR: Address doesn't exist");
@@ -144,7 +144,7 @@ function addAddress (req, res) {
 											if (validate == 0) {
 												address.save(function (err, response) {
 													if (!err) {
-														res.send(response);
+														res.status(200).send({code: 200,desc: "Address successfully created  " + email,content: {response}});
 														console.log('Address successfully created');
 													} else {
 														res.status(500).send({ code: 500, desc: err});
@@ -230,7 +230,7 @@ function updateAddress (req, res) {
 												if (validate == 0) {
 													dir.save(function (err, response) {
 														if (!err) {
-															res.send(response);
+															res.status(200).send({code: 200,desc: "Address successfully updated  " + email,content: {response}});
 															console.log('Address successfully updated');
 														} else {
 															res.status(500).send({ code: 500, desc: err});
