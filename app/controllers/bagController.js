@@ -27,11 +27,11 @@ function findBag (req, res) {
           if (user) {
               Bag.findOne({email:email}, function (err, bag) {
                 if (!err && bag) {
-                  var resp = {
+                  var user_bag = {
                     bag: bag,
                     user: user
                   }
-                  res.status(200).send({code: 200,desc: "Bag for  " + email,content: {resp}});
+                  res.status(200).send({code: 200,desc: "Bag for  " + email,content: {user_bag}});
                 } else {
                   res.status(404).send({ code: 404, desc: 'No bag bought'});
                   console.log('LOG: No bag bought');
@@ -135,7 +135,7 @@ function saveBag (user, type, remaining, res) {
         purchased: new Date
       });
 
-      bag.save(function (err, response){
+      bag.save(function (err, bag){
         if (!err) {
           res.status(200).send({code: 200,desc: "Bag prepaid successfully created " + user.email,content: {bag}});
           console.log('Bag prepaid successfully created');

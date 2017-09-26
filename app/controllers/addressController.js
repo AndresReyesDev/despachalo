@@ -62,10 +62,10 @@ function findAddress (req, res) {
 				if (email && alias) {
 					User.findOne({email:email}, function (err, user) {
 						if (!err && user) {
-							Address.findOne({email:email, alias:alias}, function (err, dir) {
+							Address.findOne({email:email, alias:alias}, function (err, address) {
 								if (!err) {
-									if (dir) {
-										res.status(200).send({code: 200,desc: "Address for " + email,content: {dir}});
+									if (address) {
+										res.status(200).send({code: 200,desc: "Address for " + email,content: {address}});
 									} else {
 										res.status(404).send({ code: 404, desc: "Address doesn't exist"});
 										console.log("ERROR: Address doesn't exist");
@@ -142,9 +142,9 @@ function addAddress (req, res) {
 
 										validateAddressCXP(address, function (validate){
 											if (validate == 0) {
-												address.save(function (err, response) {
+												address.save(function (err, address) {
 													if (!err) {
-														res.status(200).send({code: 200,desc: "Address successfully created  " + email,content: {response}});
+														res.status(200).send({code: 200,desc: "Address successfully created  " + email,content: {address}});
 														console.log('Address successfully created');
 													} else {
 														res.status(500).send({ code: 500, desc: err});
@@ -228,9 +228,9 @@ function updateAddress (req, res) {
 
 										  	validateAddressCXP(dir, function (validate){
 												if (validate == 0) {
-													dir.save(function (err, response) {
+													dir.save(function (err, address) {
 														if (!err) {
-															res.status(200).send({code: 200,desc: "Address successfully updated  " + email,content: {response}});
+															res.status(200).send({code: 200,desc: "Address successfully updated  " + email,content: {address}});
 															console.log('Address successfully updated');
 														} else {
 															res.status(500).send({ code: 500, desc: err});

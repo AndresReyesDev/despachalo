@@ -40,8 +40,8 @@ function userLogin (req, res) {
 							email: user.email
 						}
 						var token = jwt.sign(u, config.jwt.secret, {
-				          expiresIn: '1d' // expires in 24 hours
-				      });
+							expiresIn: '1d' // expires in 24 hours
+						});
 						user.token = token;
 						user.save(function (err, response) {
 							if (!err) {
