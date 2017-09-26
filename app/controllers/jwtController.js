@@ -12,7 +12,7 @@ exports.generateToken = function(req, res) {
       expiresIn: '1h'
     });
     tokenUser.token = token;
-    res.status(200).send({code: 200,desc: "Temporary token " + typeUser,content: {token}});
+    res.status(200).send({code: 200,desc: "Temporary token ",content: {token}});
 };
 
 //GET - Return token for use services
