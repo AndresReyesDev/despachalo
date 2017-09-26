@@ -4,9 +4,11 @@ var User = require('../models/user');
 
 //GET - Return token for use services
 exports.generateToken = function(req, res) {
-	var token = jwt.sign(tokenUser, config.jwt.secret, {
+    
+	var token = jwt.sign(config.jwt.user, config.jwt.secret, {
       expiresIn: '1h'
     });
+    tokenUser.token = token;
     res.status(200).send({code: 200,desc: "Temporary token " + typeUser,content: {token}});
 };
 

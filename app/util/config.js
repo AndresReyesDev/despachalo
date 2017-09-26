@@ -2,7 +2,8 @@ module.exports = {
 
 	// JWT
 	jwt: {
-		secret: 'despachalo.com'
+		secret: 'despachalo.com',
+		user: 'ug0QsrOddDG5y5dXpkR5V'
 	},
 
 	// Credenciales PuntoPagos
