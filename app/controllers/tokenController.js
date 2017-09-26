@@ -27,7 +27,7 @@ function findToken (req, res) {
           if (user && user.type == '1') {
             Token.find({}, function (err, token) {
               if (!err && token) {
-                res.status(200).send({code: 200,desc: "Find token successfully " + typeUser,content: {token}});
+                res.status(200).send({code: 200,desc: "Find token successfully " + email,content: {token}});
               } else {
                 res.status(404).send({ code: 404, descripcion: 'Tokens not found'});
                 console.log('LOG: Tokens not found ' + err);
