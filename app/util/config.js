@@ -92,8 +92,8 @@ module.exports = {
 		user: 'manuelvargasmejia@gmail.com',
 		pass: 'davidvargas+08',
 		admin: 'mvargas@formax.cl',
-		confirm: 'http://localhost:8084/desp/v1/users/validate/email?email=',
-		confirmprod: 'http://www.despachalo.com:8084/desp/v1/users/validate/email?email='
+		confirm: 'http://localhost:3000/desp/v1/users/validate/email?email=',
+		confirmprod: 'http://www.despachalo.com:3000/desp/v1/users/validate/email?email='
 	},
 
 	// SendGrid API Key
@@ -103,7 +103,7 @@ module.exports = {
 
 	// Development Environment
 	development: {
-		port: '8084',
+		port: '3000',
 		database: {
 			host: '127.0.0.1',
 			name: 'despachalo-dev'
@@ -112,7 +112,7 @@ module.exports = {
 
 	// Production Environment
 	production: {
-		port: '8084',
+		port: '3000',
 		database: {
 			user: 'admin',
 			pass: 'qpalwosk10',
