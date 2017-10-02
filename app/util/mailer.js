@@ -46,7 +46,7 @@ function sendMailResetPassword(user, psw) {
 	    from: '"Despachalo.com " <'+ config.mail.user +'>', // sender address
 	    to: user.email + ', ' + config.mail.admin, // list of receivers
 	    subject: 'Despachalo - Nueva contraseña', // Subject line
-	    html: 'Hola, ' + user.nombre + '<br/>' +
+	    html: 'Hola, ' + user.name + '<br/>' +
 	    	  '<b> Su contraseña ha cambiado, ahora es:  </b>' + psw // html body
 	};
 
