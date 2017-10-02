@@ -258,9 +258,11 @@ function save (user, res) {
 	});
 }
 
-function userResetPassword (req, res) {
-	var admin = req.param('admin');
-	var email = req.param('email');
+function userResetPasswordByAdmin (req, res) {
+	
+	var body = req.body;
+	var amdin = body.amdin;
+	var email = body.email;
 	var token = req.headers.authorization;
 	// verifies secret and checks exp
 	jwt.verify(token, config.jwt.secret, function(err, decoded) {
@@ -310,6 +312,48 @@ function userResetPassword (req, res) {
 	      	}
 	      });
 	  }
+	});
+}
+
+function userResetPassword (req, res) {
+	
+	var body = req.body;
+	var email = body.email;
+	var token = req.headers.authorization;
+	// verifies secret and checks exp
+	jwt.verify(token, config.jwt.secret, function(err, decoded) {
+		if (err) {
+			res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+			console.log('INFO: Fallo en la autenticación de Token: ' + err);
+		} else {
+			// if everything is good, save to request for use in other routes
+			req.decoded = decoded;
+			User.findOne({email:email}, function (err, user) {
+				if (!err) {
+					if (user) {
+						var psw = generator.generate({length: 10,numbers: true});
+						encrypt.cryptPassword(psw, function (err, hash) {
+							if (!err && hash) {
+								var password = 	hash;
+								user.password = password;
+								save(user, res);
+								// Send mail Reset Password
+								Mailer.sendMailResetPassword(user, psw);
+							} else {
+								res.status(500).send({ code: 500, descripcion: 'Error encrypt password'});
+								console.log('ERROR: ' + err);
+							}
+						});
+					} else {
+						res.status(404).send({ code: 404, desc: "User does'n exist"});
+						console.log("LOG: User doesn't exist");
+					}
+				} else {
+					res.status(500).send({ code: 501, desc: err.message});
+					console.log('ERROR: ' + err);
+				}
+			});
+	  	}
 	});
 }
 
