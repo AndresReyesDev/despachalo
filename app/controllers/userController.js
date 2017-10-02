@@ -110,8 +110,13 @@ function findUserByEmail (req, res) {
             req.decoded = decoded;
             if (email) {
             	User.findOne({email:email}, function (err, user) {
-            		if (!err && user) {
+            		if (!err) {
+						if (user) {
             				res.status(200).send({code: 200,desc: "User found successfully " + email,content: {user}}); 
+            			} else {
+            				res.status(404).send({ code: 404, desc: "Users doesn't exist"});
+	      					console.log("LOG: Users doesn't exist");
+            			}
             		} else {
             			res.status(500).send({ code: 500, desc: err});
             			console.log('ERROR: ' + err);
@@ -299,6 +304,9 @@ function userResetPassword (req, res) {
 	      				console.log("LOG: User isn't authorized to perform this action.");
 	      			}
 	      		});
+	      	} else {
+	      		res.status(404).send({ code: 404, desc: "User admin does exist"});
+				console.log("LOG: User admin does exist");
 	      	}
 	      });
 	  }
