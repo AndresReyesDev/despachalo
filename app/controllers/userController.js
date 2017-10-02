@@ -18,6 +18,7 @@ module.exports = {
 	findTypeUser: findTypeUser,
 	addUser: addUser,
 	userResetPassword: userResetPassword,
+	userResetPasswordByAdmin: userResetPasswordByAdmin,
 	updateUser: updateUser,
 	userRegister: userRegister,
 	userValidateEmail: userValidateEmail,
