@@ -110,10 +110,8 @@ function findUserByEmail (req, res) {
             req.decoded = decoded;
             if (email) {
             	User.findOne({email:email}, function (err, user) {
-            		if (!err) {
-            			if (user) {
+            		if (!err && user) {
             				res.status(200).send({code: 200,desc: "User found successfully " + email,content: {user}}); 
-            			}
             		} else {
             			res.status(500).send({ code: 500, desc: err});
             			console.log('ERROR: ' + err);
@@ -268,7 +266,7 @@ function userResetPassword (req, res) {
 	      // if everything is good, save to request for use in other routes
 	      req.decoded = decoded;
 	      User.findOne({email:admin}, function (err, user) {
-	      	if (!err) {
+	      	if (!err && user) {
 	      		Permission.findOne({typeUser:user.type}, function (err, per) {
 	      			if (per.resetPassword) {
 	      				User.findOne({email:email}, function (err, user) {
