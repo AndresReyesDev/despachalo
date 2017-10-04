@@ -78,11 +78,8 @@ module.exports = function(passport, dev) {
 
     }));
 
-    if (dev) {
-        facebookCallbackURL = configAuth.facebookAuth.callbackURL;
-    } else {
-        facebookCallbackURL = configAuth.facebookAuth.callbackURLPrd
-    }
+    if (dev) facebookCallbackURL = configAuth.facebookAuth.callbackURL
+    else facebookCallbackURL = configAuth.facebookAuth.callbackURLPrd
 
     // FACEBOOK Strategy
     passport.use(new FacebookStrategy({
@@ -108,15 +105,15 @@ module.exports = function(passport, dev) {
                 } else {
                     // if the user isnt in our database, create a new user
                     var newUser = new User();
-                    
+                    console.log(profile);
                     // set all of the relevant information
                     newUser.facebook.id = profile.id;
                     newUser.facebook.token = token || '';
                     newUser.facebook.name = profile.name.givenName;
                     newUser.facebook.lastname = profile.name.familyName;
-                    newUser.facebook.email = profile.emails[0].value; // for local user
+                    newUser.facebook.email = profile.email[0].value; // for local user
 
-                    newUser.email = profile.emails[0].value; // for local user
+                    newUser.email = profile.email[0].value; // for local user
                     newUser.name = profile.name.givenName;
                     newUser.lastname = profile.name.familyName;
                     newUser.provider = profile.provider; // for local user
