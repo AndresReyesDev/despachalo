@@ -98,6 +98,6 @@ module.exports = function (app, passport) {
     app.get('/desp/v1/auth/google/callback', passport.authenticate('google'), jwtController.generateSocialTokenUser);
 
     // Facebook Authentication
-    app.get('/desp/v1/auth/facebook', passport.authenticate('facebook', { scope : ['profile', 'email'] }));
+    app.get('/desp/v1/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
 	app.get('/desp/v1/auth/facebook/callback',passport.authenticate('facebook'), jwtController.generateSocialTokenUser);
 };
