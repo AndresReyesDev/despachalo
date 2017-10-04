@@ -78,8 +78,11 @@ module.exports = function(passport, dev) {
 
     }));
 
-    if (dev) facebookCallbackURL = configAuth.facebookAuth.callbackURL
-    else facebookCallbackURL = configAuth.facebookAuth.callbackURLPrd.replace('/','\\/'‌​)
+    if (dev) {
+        facebookCallbackURL = configAuth.facebookAuth.callbackURL;
+    } else {
+        facebookCallbackURL = configAuth.facebookAuth.callbackURLPrd.replace('/','\\/'‌​);
+    }
 
     // FACEBOOK Strategy
     passport.use(new FacebookStrategy({
