@@ -51,7 +51,6 @@ require('./app/routes/routes')(app, passport);
 app.get('/', function(req, res) {
     res.json({ message: 'hooray! welcome to our api of despachalo.com !' });   
 });
-app.get('/connect/facebook', passport.authorize('facebook', { scope : ['email'] }));
 
 app.listen(port, function(){
   console.log("Express server listening on port %d in %s mode", port, app.settings.env);
