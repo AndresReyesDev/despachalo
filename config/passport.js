@@ -87,6 +87,7 @@ module.exports = function(passport, dev) {
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : facebookCallbackURL,
+        profileFields   : ['id', 'emails', 'name'] //This
 
     },
     function(token, refreshToken, profile, done) {
@@ -112,9 +113,9 @@ module.exports = function(passport, dev) {
                     var name = profile.displayName.split(" ");
                     newUser.facebook.name = profile.name.givenName || name[0];
                     newUser.facebook.lastname = profile.name.familyName || name[1];
-                    newUser.facebook.email = '';
+                    newUser.facebook.email = profile.emails[0].value; // for local user
 
-                    newUser.email = ''; // for local user
+                    newUser.email = profile.emails[0].value; // for local user
                     newUser.name = profile.name.givenName || name[0];
                     newUser.lastname = profile.name.familyName || name[1];
                     newUser.provider = profile.provider; // for local user
