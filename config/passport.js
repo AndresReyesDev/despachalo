@@ -81,7 +81,7 @@ module.exports = function(passport, dev) {
     if (dev) {
         facebookCallbackURL = configAuth.facebookAuth.callbackURL;
     } else {
-        facebookCallbackURL = configAuth.facebookAuth.callbackURLPrd.replace('/','\\/'‌​);
+        facebookCallbackURL = configAuth.facebookAuth.callbackURLPrd.replace(/\//g, "\\/")
     }
 
     // FACEBOOK Strategy
