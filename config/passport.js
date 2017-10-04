@@ -109,13 +109,14 @@ module.exports = function(passport, dev) {
                     // set all of the relevant information
                     newUser.facebook.id = profile.id;
                     newUser.facebook.token = token || '';
-                    newUser.facebook.name = profile.name.givenName;
-                    newUser.facebook.lastname = profile.name.familyName;
+                    var name = profile.displayName.split(" ");
+                    newUser.facebook.name = profile.name.givenName || name[0];
+                    newUser.facebook.lastname = profile.name.familyName || name[1];
                     newUser.facebook.email = profile.email[0].value; // for local user
 
                     newUser.email = profile.email[0].value; // for local user
-                    newUser.name = profile.name.givenName;
-                    newUser.lastname = profile.name.familyName;
+                    newUser.name = profile.name.givenName || name[0];
+                    newUser.lastname = profile.name.familyName || name[1];
                     newUser.provider = profile.provider; // for local user
                     newUser.status = true; // for local user
                     newUser.type = 3; // for local user
