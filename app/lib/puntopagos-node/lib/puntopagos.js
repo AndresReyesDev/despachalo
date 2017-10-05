@@ -22,7 +22,6 @@ var request   = require('request');
 var crypto    = require('crypto');
 
 var config = require('../../../util/config.js'); // despachalo.com
-var config = require('../util/config');// despachalo.com
 
 // var DEBUG = (process.env.NODE_ENV == 'debug'); despachalo.com
 var DEBUG = true;
