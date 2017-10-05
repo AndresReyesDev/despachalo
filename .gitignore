@@ -21,7 +21,6 @@ public/css/main.css
 
 # Dependency directory
 node_modules
-!node_modules\puntopagos-node\lib\puntopagos.js
 bower_components
 
 # Editors

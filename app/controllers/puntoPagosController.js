@@ -1,5 +1,5 @@
 'use strict';
-var puntoPagos = require('puntopagos-node');
+var puntoPagos = require('../lib/puntopagos-node');
 
 var BagController = require('./bagController');
 var TicketController = require('./ticketController');
