@@ -60,7 +60,7 @@ function pagar(req, res) {
 
 									// Create payment
 									var generatedId = puntoPagos.generateId();
-									puntoPagos.pay(generatedId, monto, puntoPagos.paymentMethod.ripley, function callback(err, data){
+									puntoPagos.pay(generatedId, monto, puntoPagos.paymentMethod.webpay, function callback(err, data){
 										if (!err) {
 											var paymentInformation = new PaymentInformation ({
 												generatedId : generatedId,
@@ -127,7 +127,7 @@ function getNotificacion(req, res) {
 			puntoPagos.validate(token, pInformation.generatedId, pInformation.monto, function callback(err, data) {
 				if (!err) {
 					saveNotification(data);
-					res.send('Compra OK');
+					res.status(200).send({ code: 200, descripcion: 'Compra exitosa', content: {data}});
 				} else {
 					console.log(err);
 					res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err + ')'});

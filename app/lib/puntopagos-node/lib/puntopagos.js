@@ -124,7 +124,7 @@ exports.pay = function (trx_id, amount, paymentMethod, redirect) {
       headers : headers,
       body    : JSON.stringify(body)
   }, function (err, res, data) {
-    if (err) console.log("ERROR:", err);
+    if (err) console.log("ERROR POST:", err);
     //respuesta: 00 = OK   (Otras según tabla errores)
     //token: Identificador único de la transacción en Punto Pagos
     //trx_id: Identificador único de la transacción del cliente
