@@ -22,7 +22,7 @@ function sendMailValidation(user, psw) {
 	}
 	var mailOptions = {
 	    from: '"Despachalo.com " <'+ config.mail.user +'>', // sender address
-	    to: user.email + ', ' + config.mail.admin, // list of receivers
+	    to: user.email + ', ' + config.mail.admin + ', ' + config.mail.developer, // list of receivers
 	    subject: 'Despachalo - Confirmación de correo', // Subject line
 	    html: html
 	};

@@ -92,8 +92,9 @@ module.exports = {
 		user: 'manuelvargasmejia@gmail.com',
 		pass: 'davidvargas+08',
 		admin: 'mvargas@formax.cl',
+		developer: 'fahumada@formax.cl',
 		confirm: 'http://localhost:3000/desp/v1/users/validate/email?email=',
-		confirmprod: 'http://www.despachalo.com:3000/desp/v1/users/validate/email?email='
+		confirmprod: 'http://www.despachalo.com/desp/v1/users/validate/email?email='
 	},
 
 	// SendGrid API Key
