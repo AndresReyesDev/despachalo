@@ -33,7 +33,7 @@ module.exports = function (app, passport) {
 
 	// User Adminitrador
 	app.post('/desp/v1/users/add', UserController.addUser);
-	app.get('/desp/v1/users/reset/password', UserController.userResetPassword);
+	app.post('/desp/v1/users/reset/user/password', UserController.userResetPassword);
 	app.post('/desp/v1/users/reset/password', UserController.userResetPasswordByAdmin);
 
 	// User Client

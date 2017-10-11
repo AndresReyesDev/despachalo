@@ -319,24 +319,31 @@ function userResetPasswordByAdmin (req, res) {
 function userResetPassword (req, res) {
 	
 	var body = req.body;
-	var email = req.param('email');
+	var email = body.email;
+	var oldPassword = body.oldPassword;
+	var newPassword = body.newPassword;
 	var token = req.headers.authorization;
 
 	req.decoded = decoded;
 	User.findOne({email:email}, function (err, user) {
 		if (!err) {
 			if (user) {
-				var psw = generator.generate({length: 10,numbers: true});
-				encrypt.cryptPassword(psw, function (err, hash) {
-					if (!err && hash) {
-						var password = 	hash;
-						user.password = password;
-						save(user, res);
-						// Send mail Reset Password
-						Mailer.sendMailResetPassword(user, psw);
+				encrypt.comparePassword(oldPassword, user.password, function (err, isPasswordMatch) {
+					if (!err && isPasswordMatch) {
+						encrypt.cryptPassword(newPassword, function (err, hash) {
+						if (!err && hash) {
+							var password = 	hash;
+							user.password = password;
+							save(user, res);
+							res.status(200).send({ code: 200, descripcion: 'Password successfully change for user ' + user.email});
+						} else {
+							res.status(500).send({ code: 500, descripcion: 'Error encrypt password'});
+							console.log('ERROR: ' + err);
+						}
+					});
 					} else {
-						res.status(500).send({ code: 500, descripcion: 'Error encrypt password'});
-						console.log('ERROR: ' + err);
+						res.status(400).send({ code: 400, descripcion: 'Incorrect password'});
+						console.log('INFO: Incorrect password: ' + err);
 					}
 				});
 			} else {
