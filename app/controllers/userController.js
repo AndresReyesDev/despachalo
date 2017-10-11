@@ -262,7 +262,7 @@ function save (user, res) {
 function userResetPasswordByAdmin (req, res) {
 	
 	var body = req.body;
-	var amdin = body.amdin;
+	var admin = body.admin;
 	var email = body.email;
 	var token = req.headers.authorization;
 	// verifies secret and checks exp
