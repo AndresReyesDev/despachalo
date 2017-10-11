@@ -62,7 +62,7 @@ function userLogin (req, res) {
 				console.log("INFO: User is visitor, doesn't have an associated password: " + err);
 			}
 		} else {
-			res.status(404).send({ code: 404, desc: "Users doesn't exist"});
+			res.status(404).send({ code: 404, descripcion: "Users doesn't exist"});
 			console.log("INFO: Users doesn't exist: " + err);
 		}
 	});
