@@ -324,36 +324,45 @@ function userResetPassword (req, res) {
 	var newPassword = body.newPassword;
 	var token = req.headers.authorization;
 
-	req.decoded = decoded;
-	User.findOne({email:email}, function (err, user) {
-		if (!err) {
-			if (user) {
-				encrypt.comparePassword(oldPassword, user.password, function (err, isPasswordMatch) {
-					if (!err && isPasswordMatch) {
-						encrypt.cryptPassword(newPassword, function (err, hash) {
-						if (!err && hash) {
-							var password = 	hash;
-							user.password = password;
-							save(user, res);
-							res.status(200).send({ code: 200, descripcion: 'Password successfully change for user ' + user.email});
+	// verifies secret and checks exp
+	jwt.verify(token, config.jwt.secret, function(err, decoded) {
+		if (err) {
+			res.status(401).send({ code: 401, descripcion: 'Fallo en la autenticación de Token (' + err.message + ')'});
+			console.log('INFO: Fallo en la autenticación de Token: ' + err);
+		} else {
+	      // if everything is good, save to request for use in other routes
+	      req.decoded = decoded;
+	      User.findOne({email:email}, function (err, user) {
+			if (!err) {
+				if (user) {
+					encrypt.comparePassword(oldPassword, user.password, function (err, isPasswordMatch) {
+						if (!err && isPasswordMatch) {
+							encrypt.cryptPassword(newPassword, function (err, hash) {
+							if (!err && hash) {
+								var password = 	hash;
+								user.password = password;
+								save(user, res);
+								res.status(200).send({ code: 200, descripcion: 'Password successfully change for user ' + user.email});
+							} else {
+								res.status(500).send({ code: 500, descripcion: 'Error encrypt password'});
+								console.log('ERROR: ' + err);
+							}
+						});
 						} else {
-							res.status(500).send({ code: 500, descripcion: 'Error encrypt password'});
-							console.log('ERROR: ' + err);
+							res.status(400).send({ code: 400, descripcion: 'Incorrect password'});
+							console.log('INFO: Incorrect password: ' + err);
 						}
 					});
-					} else {
-						res.status(400).send({ code: 400, descripcion: 'Incorrect password'});
-						console.log('INFO: Incorrect password: ' + err);
-					}
-				});
+				} else {
+					res.status(404).send({ code: 404, desc: "User does'n exist"});
+					console.log("LOG: User doesn't exist");
+				}
 			} else {
-				res.status(404).send({ code: 404, desc: "User does'n exist"});
-				console.log("LOG: User doesn't exist");
+				res.status(500).send({ code: 501, desc: err.message});
+				console.log('ERROR: ' + err);
 			}
-		} else {
-			res.status(500).send({ code: 501, desc: err.message});
-			console.log('ERROR: ' + err);
-		}
+		});
+	  }
 	});
 }
 
