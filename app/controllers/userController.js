@@ -342,7 +342,6 @@ function userResetPassword (req, res) {
 								var password = 	hash;
 								user.password = password;
 								save(user, res);
-								res.status(200).send({ code: 200, descripcion: 'Password successfully change for user ' + user.email});
 							} else {
 								res.status(500).send({ code: 500, descripcion: 'Error encrypt password'});
 								console.log('ERROR: ' + err);
