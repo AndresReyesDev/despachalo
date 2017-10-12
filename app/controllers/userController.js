@@ -316,6 +316,36 @@ function userResetPasswordByAdmin (req, res) {
 	});
 }
 
+function userRecoverPassword (req, res) {
+	var body = req.body;
+	var email = body.email;
+	User.findOne({email:email}, function (err, user) {
+		if (!err) {
+			if (user) {
+				var psw = generator.generate({length: 10,numbers: true});
+				encrypt.cryptPassword(psw, function (err, hash) {
+					if (!err && hash) {
+						var password = 	hash;
+						user.password = password;
+						save(user, res);
+						// Send mail Reset Password
+						Mailer.sendMailResetPassword(user, psw);
+					} else {
+						res.status(500).send({ code: 500, descripcion: 'Error encrypt password'});
+						console.log('ERROR: ' + err);
+					}
+				});
+			} else {
+				res.status(404).send({ code: 404, desc: "User does'n exist"});
+				console.log("LOG: User doesn't exist");
+			}
+		} else {
+			res.status(500).send({ code: 501, desc: err.message});
+			console.log('ERROR: ' + err);
+		}
+	});
+}
+
 function userResetPassword (req, res) {
 	
 	var body = req.body;
