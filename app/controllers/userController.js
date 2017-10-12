@@ -19,6 +19,7 @@ module.exports = {
 	addUser: addUser,
 	userResetPassword: userResetPassword,
 	userResetPasswordByAdmin: userResetPasswordByAdmin,
+	userRecoverPassword: userRecoverPassword,
 	updateUser: updateUser,
 	userRegister: userRegister,
 	userValidateEmail: userValidateEmail,
