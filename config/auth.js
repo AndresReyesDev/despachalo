@@ -9,8 +9,8 @@ module.exports = {
     },
 
     'googleAuth' : {
-        'clientID'      : '599947091875-0fcg5jbhr30aan1aivkhp9lhcthoqop9.apps.googleusercontent.com',
-        'clientSecret'  : 'g2O-Ke17LRKwU9NRFWZ387Qy',
+        'clientID'      : '599947091875-0fcg5jbhr30aan1aivkhp9lhcthoqop9.apps.googleusercontent.com', // your App ID
+        'clientSecret'  : 'g2O-Ke17LRKwU9NRFWZ387Qy', // your App Secret
         'callbackURL'   : 'http://localhost:3000/desp/v1/auth/google/callback',
         'callbackURLPrd': 'http://www.despachalo.com/desp/v1/auth/google/callback'
     }
