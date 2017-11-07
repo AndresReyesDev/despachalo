@@ -103,7 +103,7 @@ function rates (req, response) {
 
 function services (user, tarCXP, tarCDCH, weight, response) {
   console.log('******* CXP response Tarification ******');
-  console.log(tarCXP.listaServicios[0]);
+  console.log(tarCXP.courier.listaServicios[0]);
   console.log('******* END CDCH ******');
   console.log('******* CDCH response Tarification ******');
   console.log(tarCDCH.consultaCoberturaResult.ServicioTO[0]);
