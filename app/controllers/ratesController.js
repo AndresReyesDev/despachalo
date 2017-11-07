@@ -102,6 +102,12 @@ function rates (req, response) {
 }
 
 function services (user, tarCXP, tarCDCH, weight, response) {
+  console.log('******* CXP response Tarification ******');
+  console.log(tarCXP);
+  console.log('******* END CDCH ******');
+  console.log('******* CDCH response Tarification ******');
+  console.log(tarCDCH);
+  console.log('******* END CDCH ******');
   var tarificacion = {
     _id: '0',
     descripcion: 'Exito',
