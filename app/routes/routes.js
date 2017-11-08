@@ -96,9 +96,9 @@ module.exports = function (app, passport) {
 
 	// Google Authentication
     app.get('/desp/v1/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
-    app.get('/desp/v1/auth/google/callback', passport.authenticate('google', {failureRedirect: '/loginUser'}), function(req, res) { res.redirect('/reload' + '?email=' +  req.user.email  + '&token=' + req.user.token); } , jwtController.generateSocialTokenUser);
+    app.get('/desp/v1/auth/google/callback', passport.authenticate('google', {failureRedirect: '/loginUser'}), function(req, res) { res.redirect('/reload' + '?token=' + req.user.token + '&email=' +  req.user.email ); }, jwtController.generateSocialTokenUser);
 
     // Facebook Authentication
     app.get('/desp/v1/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
-    app.get('/desp/v1/auth/facebook/callback',passport.authenticate('facebook', { failureRedirect: '/loginUser', successRedirect: '/dashboard'}), jwtController.generateSocialTokenUser);
+    app.get('/desp/v1/auth/facebook/callback',passport.authenticate('facebook'), jwtController.generateSocialTokenUser);
 };
