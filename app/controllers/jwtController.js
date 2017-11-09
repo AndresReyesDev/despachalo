@@ -24,12 +24,14 @@ exports.generateSocialTokenUser = function(req, res, callback) {
         } else {
             if (user) {
                 var tokenUser = {
+                    id: req.user.id,
                     email: req.user.email
                 }
                 var token = jwt.sign(tokenUser, config.jwt.secret, {
                   expiresIn: '1d'
                 });
                 user.token = token;
+                user.google.token = token;
                 console.log(user);
                 user.save(function (err, u) {
                     if (!err) {
