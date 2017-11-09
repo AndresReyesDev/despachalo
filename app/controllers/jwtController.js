@@ -24,7 +24,6 @@ exports.generateSocialTokenUser = function(req, res, callback) {
         } else {
             if (user) {
                 var tokenUser = {
-                    id: req.user.id,
                     email: req.user.email
                 }
                 var token = jwt.sign(tokenUser, config.jwt.secret, {
