@@ -61,6 +61,7 @@ module.exports = function(passport, dev) {
                     newUser.email = profile.emails[0].value; // for local user
                     newUser.name = profile.name.givenName; // for local user
                     newUser.lastname = profile.name.familyName; // for local user
+		    newUser.password = " "//initial password
                     newUser.provider = profile.provider; // for local user
                     newUser.status = true; // for local user
                     newUser.type = 3; // for local user
