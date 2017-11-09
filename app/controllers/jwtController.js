@@ -16,7 +16,7 @@ exports.generateToken = function(req, res) {
 };
 
 //GET - Return token for use services
-exports.generateSocialTokenUser = function(req, res) {
+exports.generateSocialTokenUser = function(req, res, callback) {
     
     User.findById(req.user.id, function (err, user) {
         if(err) {
@@ -34,14 +34,14 @@ exports.generateSocialTokenUser = function(req, res) {
                 console.log(user);
                 user.save(function (err, u) {
                     if (!err) {
-                        res.send(u);
+                        return callback(u);
                     } else {
-                        res.status(500).send({ code: 5000, descripcion: 'Token not save, login social error in generateSocialTokenUser'});
+                        return callback(undefined);
                         console.log('ERROR: ' + err);
                     }
                 });
             } else {
-                res.status(404).send({ code: 404, desc: "User doesn't exist"});
+                return callback(null);
             }
         }
     });

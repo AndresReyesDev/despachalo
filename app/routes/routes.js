@@ -97,9 +97,10 @@ module.exports = function (app, passport) {
 	// Google Authentication
     app.get('/desp/v1/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
     app.get('/desp/v1/auth/google/callback', passport.authenticate('google', {failureRedirect: '/loginUser'}), function(req, res) {
-    	console.log(req.user);
-    	res.redirect('/reload' + '?token=' + req.user.token + '&email=' +  req.user.email);
-    }, jwtController.generateSocialTokenUser);
+    	jwtController.generateSocialTokenUser(req, res, function (user) {
+    		res.redirect('/reload' + '?token=' + user.google.token + '&email=' +  user.email);
+    	});
+    });
 
     // Facebook Authentication
     app.get('/desp/v1/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
