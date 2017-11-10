@@ -123,6 +123,7 @@ module.exports = function(passport, dev) {
                     newUser.status = true; // for local user
                     newUser.type = 3; // for local user
                     newUser.quotes = config.bag.type.visitor;
+                    newUser.password = " ";
 
                     // save the user
                     newUser.save(function(err) {
