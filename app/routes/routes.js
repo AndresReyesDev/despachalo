@@ -103,6 +103,6 @@ module.exports = function (app, passport) {
     });
 
     // Facebook Authentication
-    app.get('/desp/v1/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+    app.get('/desp/v1/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
     app.get('/desp/v1/auth/facebook/callback',passport.authenticate('facebook'), jwtController.generateSocialTokenUser);
 };
