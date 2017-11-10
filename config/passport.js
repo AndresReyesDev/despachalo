@@ -88,7 +88,7 @@ module.exports = function(passport, dev) {
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : facebookCallbackURL,
-        profileFields   : ['emails']
+	profileFields   : ['emails']
 
     },
     function(token, refreshToken, profile, done) {
@@ -114,7 +114,7 @@ module.exports = function(passport, dev) {
                     var name = profile.displayName.split(" ");
                     newUser.facebook.name = profile.name.givenName || name[0];
                     newUser.facebook.lastname = profile.name.familyName || name[1];
-                    newUser.facebook.email = profile.emails[0].value; // for local user
+                    newUser.facebook.email = profile.emails[0].value // for local user
 
                     newUser.email = profile.email; // for local user
                     newUser.name = profile.name.givenName || name[0];
@@ -123,7 +123,6 @@ module.exports = function(passport, dev) {
                     newUser.status = true; // for local user
                     newUser.type = 3; // for local user
                     newUser.quotes = config.bag.type.visitor;
-                    newUser.password = " ";
 
                     // save the user
                     newUser.save(function(err) {
