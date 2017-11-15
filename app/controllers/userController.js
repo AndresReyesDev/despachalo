@@ -533,19 +533,20 @@ function userValidateEmail (req, res) {
 				user.status = true;
 				user.save(function (err, response) {
 					if (!err) {
-						res.status(200).send({code: 200,desc: "User validated successfully" + email,content: {response}}); 
+						//res.status(200).send({code: 200,desc: "User validated successfully" + email,content: {response}}); 
+						res.redirect('/reload' + '?token=' + response.token + '&email=' +  response.email);
 						console.log('User validated successfully');
 					} else {
-						res.status(500).send({ code: 500, desc: err});
+						res.redirect('/loginUser' +  err);
 						console.log('ERROR: ' + err);
 					}
 				});
 			} else {
-				res.status(202).send({ code: 202, desc: 'User already validated'});
+				res.redirect('/loginUser' +  err);
 				console.log('LOG: User already validated');
 			}
 		} else {
-			res.status(404).send({ code: 404, desc: "User doesn't exist"});
+			res.redirect('/loginUser' +  err);
 			console.log("LOG: User doesn't exist");
 		}
 	});
