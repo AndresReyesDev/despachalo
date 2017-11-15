@@ -1,7 +1,7 @@
 // load all the things we need
 var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var encrypt = require('../util/encrypt');
+var encrypt = require('../app/util/encrypt');
 
 // load up the user model
 var User = require('../app/models/user');
