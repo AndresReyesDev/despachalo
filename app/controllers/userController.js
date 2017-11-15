@@ -38,7 +38,6 @@ function userLogin (req, res) {
 				encrypt.comparePassword(password, user.password, function (err, isPasswordMatch) {
 					if (!err && isPasswordMatch) {
 						var u = {
-							id: user._id,
 							email: user.email
 						}
 						var token = jwt.sign(u, config.jwt.secret, {
