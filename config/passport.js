@@ -61,17 +61,25 @@ module.exports = function(passport, dev) {
                     newUser.email = profile.emails[0].value; // for local user
                     newUser.name = profile.name.givenName; // for local user
                     newUser.lastname = profile.name.familyName; // for local user
-                    newUser.password = null; //initial password
                     newUser.provider = profile.provider; // for local user
                     newUser.status = true; // for local user
                     newUser.type = 3; // for local user
                     newUser.quotes = config.bag.type.visitor;
 
-                    // save the user
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-                        return done(null, newUser);
+                    encrypt.cryptPassword(config.jwt.password, function (err, hash) {
+                        if (!err && hash) {
+                            var password =  hash;
+                            newUser.password = password;
+
+                            // save the user
+                            newUser.save(function(err) {
+                                if (err)
+                                    throw err;
+                                return done(null, newUser);
+                            });
+                        } else {
+                           return done(err);
+                        }
                     });
                 }
             });
@@ -124,17 +132,26 @@ module.exports = function(passport, dev) {
                     newUser.email = profile.emails[0].value; // for local user
                     newUser.name = profile.name.givenName || name[0];
                     newUser.lastname = profile.name.familyName || name[1];
-                    newUser.password = null; //initial password
+
                     newUser.provider = profile.provider; // for local user
                     newUser.status = true; // for local user
                     newUser.type = 3; // for local user
                     newUser.quotes = config.bag.type.visitor;
 
-                    // save the user
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-                        return done(null, newUser);
+                    encrypt.cryptPassword(config.jwt.password, function (err, hash) {
+                        if (!err && hash) {
+                            var password =  hash;
+                            newUser.password = password;
+
+                            // save the user
+                            newUser.save(function(err) {
+                                if (err)
+                                    throw err;
+                                return done(null, newUser);
+                            });
+                        } else {
+                            return done(err);
+                        }
                     });
                 }
             });
