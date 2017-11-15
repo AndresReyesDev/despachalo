@@ -31,8 +31,12 @@ exports.generateSocialTokenUser = function(req, res, callback) {
                   expiresIn: '1d'
                 });
                 user.token = token;
-                user.google.token = token;
-                console.log(user);
+                if (user.provider=='google') {
+                    user.google.token = token;
+                if (user.provider=='facebook') {
+                    user.facebook.token = token;
+                }
+                console.log('** Update User token social login* *');
                 user.save(function (err, u) {
                     if (!err) {
                         return callback(u);

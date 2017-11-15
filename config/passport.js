@@ -88,7 +88,7 @@ module.exports = function(passport, dev) {
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : facebookCallbackURL,
-	profileFields   : ['emails']
+        profileFields   : ['emails']
 
     },
     function(token, refreshToken, profile, done) {
@@ -103,6 +103,7 @@ module.exports = function(passport, dev) {
                     return done(err);
                 if (user) {
                     // if a user is found, log them in
+                    console.log('** User finded social **');
                     return done(null, user);
                 } else {
                     // if the user isnt in our database, create a new user

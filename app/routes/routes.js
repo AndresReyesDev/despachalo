@@ -104,5 +104,9 @@ module.exports = function (app, passport) {
 
     // Facebook Authentication
     app.get('/desp/v1/auth/facebook', passport.authenticate('facebook', { scope : ['email'] }));
-    app.get('/desp/v1/auth/facebook/callback',passport.authenticate('facebook'), jwtController.generateSocialTokenUser);
+    app.get('/desp/v1/auth/facebook/callback',passport.authenticate('facebook'), function() {
+    	jwtController.generateSocialTokenUser(req, res, function (user) {
+    		res.redirect('/reload' + '?token=' + user.facebook.token + '&email=' +  user.email);
+    	});
+    });
 };
