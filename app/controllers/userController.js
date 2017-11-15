@@ -45,6 +45,8 @@ function userLogin (req, res) {
 							expiresIn: '1d' // expires in 24 hours
 						});
 						user.token = token;
+						console.log('*** USER LOGIN ***');
+						console.log(user);
 						user.save(function (err, response) {
 							if (!err) {
 								res.status(200).send({code: 200,desc: "User logged in successfully " + email,content: {response}});
@@ -454,8 +456,8 @@ function userRegister (req, res) {
 		if (!err) {
 			if (!user) {
 				var token = jwt.sign({email: email}, config.jwt.secret, {
-		          expiresIn: '1d' // expires in 24 hours
-		      });
+					expiresIn: '1d' // expires in 24 hours
+			    });
 				var user = new User ({
 					email: email,
 					name: body.name,
@@ -463,7 +465,8 @@ function userRegister (req, res) {
 					type: body.type,
 					phone: body.phone,
 					mobile: body.mobile,
-					token: token
+					token: token,
+					provider: 'despachalo'
 				});
 				
 				user.save(function (err, response) {
