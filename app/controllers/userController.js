@@ -37,12 +37,13 @@ function userLogin (req, res) {
 			if (user.password != null) {
 				encrypt.comparePassword(password, user.password, function (err, isPasswordMatch) {
 					if (!err && isPasswordMatch) {
-						var u = {
-							email: user.email
-						}
-						var token = jwt.sign(u, config.jwt.secret, {
-							expiresIn: '1d' // expires in 24 hours
-						});
+						var tokenUser = {
+		                    id: user._id,
+		                    email: user.email
+		                }
+		                var token = jwt.sign(tokenUser, config.jwt.secret, {
+		                  expiresIn: '1d'
+		                });
 						user.token = token;
 						if (user.provider=='google') {
 		                    user.google.token = token;
