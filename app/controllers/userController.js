@@ -45,6 +45,11 @@ function userLogin (req, res) {
 							expiresIn: '1d' // expires in 24 hours
 						});
 						user.token = token;
+						if (user.provider=='google') {
+		                    user.google.token = token;
+		                } else if (user.provider=='facebook') {
+		                    user.facebook.token = token;
+		                }
 						console.log('*** USER LOGIN ***');
 						console.log(user);
 						user.save(function (err, response) {
