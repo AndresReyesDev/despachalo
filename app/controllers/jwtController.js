@@ -36,7 +36,8 @@ exports.generateSocialTokenUser = function(req, res, callback) {
                 } else if (user.provider=='facebook') {
                     user.facebook.token = token;
                 }
-                console.log('** Update User token social login* *');
+                console.log('** Update User token social login **');
+                console.log(user);
                 user.save(function (err, u) {
                     if (!err) {
                         return callback(u);

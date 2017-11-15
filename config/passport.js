@@ -104,11 +104,15 @@ module.exports = function(passport, dev) {
                 if (user) {
                     // if a user is found, log them in
                     console.log('** User finded social **');
+                    console.log(user);
+                    console.log('** User finded social **');
                     return done(null, user);
                 } else {
                     // if the user isnt in our database, create a new user
                     var newUser = new User();
+                    console.log('** Profile **');
                     console.log(profile);
+                    console.log('** Profile **');
                     // set all of the relevant information
                     newUser.facebook.id = profile.id;
                     newUser.facebook.token = token || '';
@@ -117,7 +121,7 @@ module.exports = function(passport, dev) {
                     newUser.facebook.lastname = profile.name.familyName || name[1];
                     newUser.facebook.email = profile.emails[0].value // for local user
 
-                    newUser.email = profile.email; // for local user
+                    newUser.email = profile.emails[0]; // for local user
                     newUser.name = profile.name.givenName || name[0];
                     newUser.lastname = profile.name.familyName || name[1];
                     newUser.provider = profile.provider; // for local user
