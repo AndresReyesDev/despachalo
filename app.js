@@ -4,7 +4,7 @@ var app = express();
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var passport = require('passport');
-var logger = require('express-logger');
+//var logger = require('express-logger');
 var cors = require('cors');
 var config = require('./app/util/config');
 
@@ -36,7 +36,7 @@ mongoose.connect(mongodbUri, function(err, res) {
   else console.log('Conexión con la BD '+ app.settings.env +' - '+ db +' exitosa');
 });
 
-app.use(logger({path:'./app/logs/despachalo-logs.txt'}));
+//app.use(logger({path:'./app/logs/despachalo-logs.txt'}));
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
