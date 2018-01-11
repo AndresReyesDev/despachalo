@@ -60,7 +60,7 @@ function pagar(req, res) {
 
 									// Create payment
 									var generatedId = puntoPagos.generateId();
-									puntoPagos.pay(generatedId, monto, puntoPagos.paymentMethod.webpay, function callback(err, data){
+									puntoPagos.pay(generatedId, monto, puntoPagos.paymentMethod.ripley, function callback(err, data){
 										if (!err) {
 											var paymentInformation = new PaymentInformation ({
 												generatedId : generatedId,
