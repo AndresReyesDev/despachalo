@@ -43,7 +43,7 @@ if (!DEBUG) {
   PUNTOPAGOS_KEY     = "replace_with_production_key";
   PUNTOPAGOS_SECRET  = "replace_with_production_secret";
 } else if (DEBUG) {
-  PUNTOPAGOS_URL     = "https://sandbox.puntopagos.com/";
+  PUNTOPAGOS_URL     = "http://sandbox.puntopagos.com/";
   PUNTOPAGOS_KEY     = config.puntoPagos.test.key; // despachalo.com
   PUNTOPAGOS_SECRET  = config.puntoPagos.test.secret; // despachalo.com
 }
