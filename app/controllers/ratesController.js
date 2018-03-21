@@ -106,8 +106,9 @@ function services (user, tarCXP, tarCDCH, weight, response) {
   console.log(tarCXP.courier.listaServicios[0]);
   console.log('******* END CDCH ******');
   console.log('******* CDCH response Tarification ******');
-  console.log(tarCDCH.consultaCoberturaResult.ServicioTO[0]);
+  console.log(tarCDCH.consultaCoberturaResult);
   console.log('******* END CDCH ******');
+
   var tarificacion = {
     _id: '0',
     descripcion: 'Exito',
