@@ -102,16 +102,12 @@ function rates (req, response) {
 }
 
 function services (user, tarCXP, tarCDCH, weight, response) {
-  console.log('******* CXP response Tarification ******');
-  console.log(tarCXP.courier.listaServicios[0]);
-  console.log('******* END CDCH ******');
-  console.log('******* CDCH response Tarification ******');
-  console.log(tarCDCH.consultaCoberturaResult.ServicioTO[0]);
-  console.log('******* END CDCH ******');
-  var tarificacion = {
-    _id: '0',
-    descripcion: 'Exito',
-    tarificacionCXP: {
+
+  if (typeof tarCXP !== 'undefined' && typeof tarCXP.courier !== 'undefined') {
+    console.log('******* CXP response Tarification ******');
+    console.log(tarCXP.courier.listaServicios[0]);
+    console.log('******* END CDCH ******');
+    var tarificacion_cxp = {
       codEstado: tarCXP.courier.codEstado[0],
       glsEstado: tarCXP.courier.glsEstado[0],
       servicio: {
@@ -120,8 +116,28 @@ function services (user, tarCXP, tarCDCH, weight, response) {
         pesoCalculo: tarCXP.courier.listaServicios[0].pesoCalculo[0],
         valorServicio: tarCXP.courier.listaServicios[0].valorServicio[0]
       }
-    },
-    tarificacionCDCH: {
+    }
+  } else {
+    console.log('******* CXP response Tarification ******');
+    console.log('******* SERVICIO DE CHILEXPRESS NO TIENE COBERTURA *******');
+    console.log('******* END CDCH ******');
+    var tarificacion_cxp = {
+      codEstado: '1',
+      glsEstado: 'NOK',
+      servicio: {
+        codServicio: '',
+        glsServicio: '',
+        pesoCalculo: '',
+        valorServicio: ''
+      }
+    }
+  }
+
+  if (typeof tarCDCH !== 'undefined' && typeof tarCDCH.consultaCoberturaResult !== 'undefined') {
+    console.log('******* CDCH response Tarification ******');
+    console.log(tarCDCH.consultaCoberturaResult.ServicioTO[0]);
+    console.log('******* END CDCH ******');
+    var tarificacion_cdch = {
       codEstado: '0',
       glsEstado: 'OK',
       servicio:{
@@ -130,6 +146,33 @@ function services (user, tarCXP, tarCDCH, weight, response) {
         pesoCalculo: weight+'',
         valorServicio: tarCDCH.consultaCoberturaResult.ServicioTO[0].TotalTasacion.Total
       }
+    }
+  } else {
+    console.log('******* CDCH response Tarification ******');
+    console.log('******* SERVICIO DE CORREOS DE CHILE NO TIENE COBERTURA *******');
+    console.log('******* END CDCH ******');
+    var tarificacion_cdch = {
+      codEstado: '1',
+      glsEstado: 'NOK',
+      servicio:{
+        codServicio: '',
+        glsServicio: '',
+        pesoCalculo: weight+'',
+        valorServicio: ''
+      }
+    }
+  }
+
+  
+  
+  var tarificacion = {
+    _id: '0',
+    descripcion: 'Exito',
+    tarificacionCXP: {
+      tarificacion_cxp
+    },
+    tarificacionCDCH: {
+      tarificacion_cdch
     }
   }
 
