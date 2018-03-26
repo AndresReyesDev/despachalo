@@ -471,7 +471,7 @@ function userRegister (req, res) {
 					phone: body.phone,
 					mobile: body.mobile,
 					token: token,
-					quotes = config.bag.type.visitor,
+					quotes : config.bag.type.visitor,
 					provider: 'despachalo'
 				});
 				
