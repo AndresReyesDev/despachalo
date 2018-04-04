@@ -290,7 +290,7 @@ function processDteBallotMethod (email, transactionId, res) {
 														}
 													});
 												} else {
-													res.status(500).send({ code: 500, desc: err});
+													res.status(500).send({ code: 500, desc: json.RespuestaIntegracion.Descripcion[0]});
 													console.log('ERROR: Information incorrect '+ json.RespuestaIntegracion.Descripcion[0]);
 												}
 					                        });
