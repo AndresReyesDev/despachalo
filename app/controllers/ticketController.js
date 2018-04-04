@@ -255,8 +255,9 @@ function processDteBallotMethod (email, transactionId, res) {
 
 											parseString(XMLString, function (err, json) {
 
-												if(!err) {
+												if(json.RespuestaIntegracion.IdResultado[0] == '0') {
 													console.log('***** JSON BALLOT *****');
+													console.log(json);
 													console.log(json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0]);
 													
 													var ballotXML = new BallotXML({
@@ -276,8 +277,8 @@ function processDteBallotMethod (email, transactionId, res) {
 														sobreID: json.RespuestaIntegracion.SobreID[0],
 														segundosDeEjecucion: json.RespuestaIntegracion.SegundosDeEjecucion[0],
 														UrlXMLEnvioSII: json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0].UrlsXMLEnvioSII[0].UrlXMLEnvioSII[0],
-														UrlBMP: json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0].UrlsBMP[0],
-														UrlPDF: json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0].UrlsPDF[0]
+														UrlBMP: json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0].UrlsBMP[0].UrlBMP[0],
+														UrlPDF: json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0].UrlsPDF[0].UrlPDF[0]
 													});
 
 													ballotXML.save(function (err, ballXML){
@@ -290,7 +291,7 @@ function processDteBallotMethod (email, transactionId, res) {
 													});
 												} else {
 													res.status(500).send({ code: 500, desc: err});
-													console.log('ERROR: parseString Ballot xml '+ err);
+													console.log('ERROR: Information incorrect '+ json.RespuestaIntegracion.Descripcion[0]);
 												}
 					                        });
 										} else {
