@@ -255,35 +255,41 @@ function processDteBallotMethod (email, transactionId, res) {
 
 											parseString(XMLString, function (err, json) {
 
-												var ballotXML = new BallotXML({
-													email: email,
-													transactionId: transactionId,
-													idResultado: json.RespuestaIntegracion.IdResultado[0],
-													descripcion: json.RespuestaIntegracion.Descripcion[0],
-													detalle: json.RespuestaIntegracion.Detalle[0],
-													idProceso: json.RespuestaIntegracion.IdProceso[0],
-													nameServer: json.RespuestaIntegracion.NameServer[0],
-													nameWS: json.RespuestaIntegracion.NameWS[0],
-													iDServer: json.RespuestaIntegracion.IDServer[0],
-													folioAsignado: json.RespuestaIntegracion.FolioAsignado[0],
-													foliosDisponibles: json.RespuestaIntegracion.FoliosDisponibles[0],
-													cantidadResultados: json.RespuestaIntegracion.CantidadResultados[0],
-													trackID: json.RespuestaIntegracion.TrackID[0],
-													sobreID: json.RespuestaIntegracion.SobreID[0],
-													segundosDeEjecucion: json.RespuestaIntegracion.SegundosDeEjecucion[0],
-													UrlXMLEnvioSII: json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0].UrlsXMLEnvioSII[0].UrlXMLEnvioSII[0],
-													UrlBMP: json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0].UrlsBMP[0].UrlBMP[0],
-													UrlPDF: json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0].UrlsPDF[0].UrlPDF[0]
-												});
+												if(!err) {
 
-												ballotXML.save(function (err, ballXML){
-													if (!err) {
-														res.send(ballXML);
-													} else {
-														res.status(500).send({ code: 500, desc: err});
-														console.log('ERROR: Save Ballot xml '+ err);
-													}
-												});
+													var ballotXML = new BallotXML({
+														email: email,
+														transactionId: transactionId,
+														idResultado: json.RespuestaIntegracion.IdResultado[0],
+														descripcion: json.RespuestaIntegracion.Descripcion[0],
+														detalle: json.RespuestaIntegracion.Detalle[0],
+														idProceso: json.RespuestaIntegracion.IdProceso[0],
+														nameServer: json.RespuestaIntegracion.NameServer[0],
+														nameWS: json.RespuestaIntegracion.NameWS[0],
+														iDServer: json.RespuestaIntegracion.IDServer[0],
+														folioAsignado: json.RespuestaIntegracion.FolioAsignado[0],
+														foliosDisponibles: json.RespuestaIntegracion.FoliosDisponibles[0],
+														cantidadResultados: json.RespuestaIntegracion.CantidadResultados[0],
+														trackID: json.RespuestaIntegracion.TrackID[0],
+														sobreID: json.RespuestaIntegracion.SobreID[0],
+														segundosDeEjecucion: json.RespuestaIntegracion.SegundosDeEjecucion[0],
+														UrlXMLEnvioSII: json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0].UrlsXMLEnvioSII[0].UrlXMLEnvioSII[0],
+														UrlBMP: json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0].UrlsBMP[0].UrlBMP[0],
+														UrlPDF: json.RespuestaIntegracion.XmlDetalleConsultas[0].IdDoc[0].UrlsPDF[0].UrlPDF[0]
+													});
+
+													ballotXML.save(function (err, ballXML){
+														if (!err) {
+															res.send(ballXML);
+														} else {
+															res.status(500).send({ code: 500, desc: err});
+															console.log('ERROR: Save Ballot xml '+ err);
+														}
+													});
+												} else {
+													res.status(500).send({ code: 500, desc: err});
+													console.log('ERROR: parseString Ballot xml '+ err);
+												}
 					                        });
 										} else {
 											res.status(500).send({ code: 501, desc: 'Error processDteBoleta' + err});
