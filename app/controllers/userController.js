@@ -423,6 +423,8 @@ function updateUser (req, res) {
 			console.log('INFO: Fallo en la autenticación de Token: ' + err);
 		} else {
 	      // if everything is good, save to request for use in other routes
+	      console.log('*** UPDATE USER ***');
+	      console.log('Init process updateUser for ' + email);
 	      req.decoded = decoded;
 	      User.findOne({email:email}, function (err, user) {
 	      	if (!err && user) {
