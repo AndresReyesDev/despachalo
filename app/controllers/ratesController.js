@@ -163,8 +163,13 @@ function services (user, tarCXP, tarCDCH, weight, response) {
     }
   }
 
-  
-  
+  console.log("--- TAR CXP ---");
+  console.log(tarificacion_cxp);
+  console.log("--- END TAR CXP ---");
+  console.log("--- TAR CDCH ---");
+  console.log(tarificacion_cdch);
+  console.log("--- END TAR CDCH ---");
+
   var tarificacion = {
     _id: '0',
     descripcion: 'Exito',
