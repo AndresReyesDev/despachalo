@@ -174,24 +174,26 @@ function services (user, tarCXP, tarCDCH, weight, response) {
     }
   }
 
+  console.log('--- TARIFICACION ---');
   console.log(tarificacion);
+  console.log('--- END TARIFICACION ---');
 
   var quote = new Quote ({
     description: tarificacion.descripcion,
     email: user.email,
     numQuote: user.quotes,
-    cxpCodEstado: tarificacion.tarificacionCXP.codEstado,
-    cxpGlsEstado: tarificacion.tarificacionCXP.glsServicio,
-    cxpCodServicio: tarificacion.tarificacionCXP.servicio.codServicio,
-    cxpGlsServicio: tarificacion.tarificacionCXP.servicio.glsServicio,
-    cxpPesoCalculo: tarificacion.tarificacionCXP.servicio.pesoCalculo,
-    cxpValorServicio: tarificacion.tarificacionCXP.servicio.valorServicio,
-    cdchCodEstado: tarificacion.tarificacionCDCH.codEstado,
-    cdchGlsEstado: tarificacion.tarificacionCDCH.glsEstado,
-    cdchCodServicio: tarificacion.tarificacionCDCH.servicio.codServicio,
-    cdchGlsServicio: tarificacion.tarificacionCDCH.servicio.glsServicio,
-    cdchPesoCalculo: tarificacion.tarificacionCDCH.servicio.pesoCalculo,
-    cdchValorServicio: tarificacion.tarificacionCDCH.servicio.valorServicio
+    cxpCodEstado: tarificacion.tarificacionCXP.tarificacion_cxp.codEstado,
+    cxpGlsEstado: tarificacion.tarificacionCXP.tarificacion_cxp.glsServicio,
+    cxpCodServicio: tarificacion.tarificacionCXP.tarificacion_cxp.servicio.codServicio,
+    cxpGlsServicio: tarificacion.tarificacionCXP.tarificacion_cxp.servicio.glsServicio,
+    cxpPesoCalculo: tarificacion.tarificacionCXP.tarificacion_cxp.servicio.pesoCalculo,
+    cxpValorServicio: tarificacion.tarificacionCXP.tarificacion_cxp.servicio.valorServicio,
+    cdchCodEstado: tarificacion.tarificacionCDCH.tarificacion_cdch.codEstado,
+    cdchGlsEstado: tarificacion.tarificacionCDCH.tarificacion_cdch.glsEstado,
+    cdchCodServicio: tarificacion.tarificacionCDCH.tarificacion_cdch.servicio.codServicio,
+    cdchGlsServicio: tarificacion.tarificacionCDCH.tarificacion_cdch.servicio.glsServicio,
+    cdchPesoCalculo: tarificacion.tarificacionCDCH.tarificacion_cdch.servicio.pesoCalculo,
+    cdchValorServicio: tarificacion.tarificacionCDCH.tarificacion_cdch.servicio.valorServicio
   });
 
   console.log(quote);
