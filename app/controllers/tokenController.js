@@ -24,7 +24,7 @@ function findToken (req, res) {
       req.decoded = decoded;
       User.findOne({email:email}, function (err, user) {
         if (!err) {
-          if (user && user.type == '1') {
+          if (user) {
             Token.find({}, function (err, token) {
               if (!err && token) {
                 res.status(200).send({code: 200,desc: "Find token successfully " + email,content: {token}});
@@ -34,8 +34,8 @@ function findToken (req, res) {
               }
             });
           } else {
-            res.status(202).send({ code: 202, desc: 'User must be Administrator'});
-            console.log('LOG: User must be Administrator');
+            res.status(404).send({ code: 404, descripcion: "User doesn't exist"});
+            console.log("INFO: User doesn't exist: " + err);
           }
         } else {
           res.status(500).send({ code: 500, desc: err});
