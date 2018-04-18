@@ -26,6 +26,7 @@ module.exports = function (app, passport) {
 	app.post('/desp/v1/users', UserController.findUserByEmail);
 	app.put('/desp/v1/users', UserController.updateUser);
 	app.delete('/desp/v1/users', UserController.deleteUser);
+	app.post('/desp/v1/users/contact', UserController.contactForm);
 
 	// User types
 	app.get('/desp/v1/users/types', UserController.findTypesUser);

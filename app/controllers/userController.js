@@ -3,6 +3,7 @@
 var User = require('../models/user');
 var Permission = require('../models/permission');
 var Bag = require('../models/bag');
+var msgContact = require('../models/mailing');
 
 var encrypt = require('../util/encrypt');
 var generator = require('generate-password');
@@ -23,7 +24,8 @@ module.exports = {
 	updateUser: updateUser,
 	userRegister: userRegister,
 	userValidateEmail: userValidateEmail,
-	deleteUser: deleteUser
+	deleteUser: deleteUser,
+	contactForm: contactForm
 };
 
 function userLogin (req, res) {
@@ -592,4 +594,30 @@ function deleteUser (req, res) {
 	      });
 	  }
 	});
+}
+
+function contactForm( req, res){
+	var body = req.body;
+	var mail = body.email;
+	var name = body.name;
+	var phone = body.phone;
+	var country = body.country;
+	var city = body.city;
+	var message = body.message;
+
+	if(!mail){
+		console.log('LOG: Non E-mail!');
+		res.status(500).send({code: 500,desc: 'Email address is not valid!'});
+	} else{
+		var msgContactForm = new msgContact({
+			email: mail,
+			name: name,	
+			phone: phone,
+			country: country,
+			city: city,
+			message: message
+		});
+		Mailer.sendMailContactForm(msgContactForm, res);
+		res.status(200).send({code: 200,desc: 'Send Mail Success!'});
+	}
 }
