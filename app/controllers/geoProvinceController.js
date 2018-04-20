@@ -36,7 +36,7 @@ function geoProvinces(req, res) {
 				  		var province = new Province ({
 				  			idDSPL: provinces[i].idDSPL,
 							nameDSPL: provinces[i].nameDSPL,
-							idrRegionDSPL: provinces[i].idRegionDSPL
+							idRegionDSPL: provinces[i].idRegionDSPL
 						});
 						prov.push(province);
 						save(province);
