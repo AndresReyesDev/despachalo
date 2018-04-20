@@ -54,7 +54,7 @@ function geoProvinces(req, res) {
 					res.status(404).send({ code: 404, desc: "Provinces doesn't exist"});
 					console.log('ERROR: ' + err);
 				}
-			}).sort('idDSPL');
+			});
 		  }
 	    }
 	});
