@@ -90,8 +90,8 @@ module.exports = {
 
 	// Servicio de correo
 	mail: {
-		user: 'contacto@despachalo.com',
-		pass: 'Aeds1103',
+		user: 'manuelvargasmejia@gmail.com',
+		pass: 'davidvargas+08',
 		admin: 'contacto@despachalo.com',
 		developer: 'fahumada@formax.cl',
 		confirm: 'http://localhost:3000/desp/v1/users/validate/email?email=',
