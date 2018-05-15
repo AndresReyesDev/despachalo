@@ -97,7 +97,7 @@ module.exports = {
 		confirm: 'http://localhost:3000/desp/v1/users/validate/email?email=',
 		confirmprod: 'http://www.despachalo.com/desp/v1/users/validate/email?email='
 	},
-
+ 
 	// SendGrid API Key
 	sendGrig: {
 		key: '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'
