@@ -99,7 +99,7 @@ module.exports = function (app, passport) {
     app.get('/desp/v1/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
     app.get('/desp/v1/auth/google/callback', passport.authenticate('google', {failureRedirect: '/loginUser'}), function(req, res) {
     	jwtController.generateSocialTokenUser(req, res, function (user) {
-    		res.redirect('/reload' + '?token=' + user.google.token + '&email=' +  user.email);
+    		res.redirect('/User/reload' + '?token=' + user.google.token + '&email=' +  user.email);
     	});
     });
 
@@ -107,7 +107,7 @@ module.exports = function (app, passport) {
     app.get('/desp/v1/auth/facebook', passport.authenticate('facebook', { scope : ['email', 'public_profile'] }));
     app.get('/desp/v1/auth/facebook/callback',passport.authenticate('facebook'), function(req, res) {
     	jwtController.generateSocialTokenUser(req, res, function (user) {
-    		res.redirect('/reload' + '?token=' + user.facebook.token + '&email=' +  user.email);
+    		res.redirect('/User/reload' + '?token=' + user.facebook.token + '&email=' +  user.email);
     	});
     });
 };
