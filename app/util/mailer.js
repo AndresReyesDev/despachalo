@@ -76,13 +76,13 @@ function sendMailContactForm(req, res) {
 	var mailOptions = {
 	    from: '"Despachalo.com " <'+ config.mail.user +'>', // sender address
 	    to: email + ', ' + config.mail.admin, // list of receivers
-	    subject: 'Despachalo - Gracias por contactárnos', // Subject line
+	    subject: 'Despachalo - Gracias por contactarnos', // Subject line
 	    html: 'Hola, ' + '<b>' + name + '</b>' + '<br/>' +
 			  'Hemos recibido su mensaje, muy pronto le contactaremos. ' + '<br/><br/>'+
 			  'Su mensaje: ' + '<br/>' +
-			  '<i>' + 'Teléfono: ' + phone + '<br/>'+
+			  'Teléfono: ' + phone + '<br/>'+
 			  'Ubicación: ' + country + ', ' + city + '<br/>' +
-			  'Mensaje: ' + msg + '. </i>' // html body
+			  'Mensaje: ' + msg // html body
 	};
 
 	// send mail with defined transport object
