@@ -538,7 +538,7 @@ function userValidateEmail (req, res) {
 				user.save(function (err, response) {
 					if (!err) {
 						//res.status(200).send({code: 200,desc: "User validated successfully" + email,content: {response}}); 
-						res.redirect('/reload' + '?token=' + response.token + '&email=' +  response.email);
+						res.redirect('/User/reload' + '?token=' + response.token + '&email=' +  response.email);
 						console.log('User validated successfully');
 					} else {
 						res.redirect('/loginUser' +  err);
