@@ -52,13 +52,13 @@ function rates (req, response) {
 
                     var callback = function (chunck, tipo) {
                       if (tipo == 'cxp') {
-                        console.log('CXP - ' + typeof(chunck));
+                        //console.log('CXP - ' + typeof(chunck));
                         parseString(chunck, function (err, result) {
                           var res = result;
                           tarCXP = res;
                         });
                       } else if (tipo == 'cdch') {
-                        console.log('CDCH - ' + typeof(chunck));
+                        //console.log('CDCH - ' + typeof(chunck));
                         tarCDCH = chunck;
                       }
 
@@ -67,7 +67,12 @@ function rates (req, response) {
                         services(user, tarCXP, tarCDCH, weight, response);
                       }
                     }
-
+                    console.log("ComunaOrigen: " + communeOrigin);
+                    console.log("ComunaDestino: " + communeDestination);
+                    console.log("Peso de cotizacion: " + weight);
+                    console.log("Ancho de cotizacion: " + width);
+                    console.log("Alto de cotizacion: " + height);
+                    console.log("Largo de cotizacion: " + long);
                     // Tarificacion CXP
                     Rates.rateCXP(communeOrigin, communeDestination, weight, width, height, long, callback);
 
